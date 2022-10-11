@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://art/boardPinkMaroon.png" type="Texture" id=1]
+[ext_resource path="res://Pieces.gd" type="Script" id=2]
+
+[node name="ChessBoard" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 281.524
+margin_top = 71.2719
+margin_right = 750.524
+margin_bottom = 540.272
+texture = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Pieces" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="PiecesTextTileMap" type="TextureRect" parent="Pieces"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
