@@ -7,16 +7,8 @@
 [node name="ChessBoard" type="Node2D"]
 script = ExtResource( 3 )
 
-[node name="BoardTexture" type="TextureRect" parent="."]
-margin_left = 281.524
-margin_top = 71.2719
-margin_right = 750.524
-margin_bottom = 540.272
+[node name="BoardTexture" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Pieces" type="Node" parent="."]
 
