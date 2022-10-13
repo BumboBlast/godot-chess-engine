@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://art/boardPinkMaroon.png" type="Texture" id=1]
+[ext_resource path="res://art/debugPiecesSpriteSheet1.png" type="Texture" id=2]
 [ext_resource path="res://ChessBoard.gd" type="Script" id=3]
 
 [node name="ChessBoard" type="Node2D"]
@@ -19,11 +20,8 @@ __meta__ = {
 
 [node name="Pieces" type="Node" parent="."]
 
-[node name="PiecesTextTileMap" type="TextureRect" parent="Pieces"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="PiecesTextTileMap" type="Sprite" parent="Pieces"]
+visible = false
+texture = ExtResource( 2 )
 
 [connection signal="ready" from="BoardTexture" to="." method="_on_BoardTexture_ready"]
