@@ -27,8 +27,32 @@ func instanceNode2D(name):
 
 func createPiece(name, amount):
 	for n in amount:
-		var pawnName = name + String(n)
-		instanceNode2D(pawnName)
+		var pieceName = name + String(n)
+		instanceNode2D(pieceName)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -49,20 +73,49 @@ func findSpriteSheetRect(pieceName):
 	if (pieceName.begins_with("Queen")):
 		return Rect2(0,0,spriteSize[0],spriteSize[1])
 
+
+
 func findSquareFromPiece(pieceName):
-	return "A1"
+	var regex = RegEx.new()
+	regex.compile("\\d+")
+	var pieceCounter = regex.search(pieceName).get_string()
+	pieceCounter = int(pieceCounter)
+	
+	
+	
 	if (pieceName.begins_with("Pawn")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if pieceCounter < 8:
+			return String(char(pieceCounter + 65) + "2")
+		else:
+			return String(char(pieceCounter - 8 + 65) + "7")
+	
 	if (pieceName.begins_with("Knight")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if (pieceCounter == 0): return "B1"
+		if (pieceCounter == 1): return "B8"
+		if (pieceCounter == 2): return "G1"
+		if (pieceCounter == 3): return "G8"
+		
 	if (pieceName.begins_with("Bishop")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if (pieceCounter == 0): return "C1"
+		if (pieceCounter == 1): return "C8"
+		if (pieceCounter == 2): return "F1"
+		if (pieceCounter == 3): return "F8"
+	
 	if (pieceName.begins_with("Rook")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if (pieceCounter == 0): return "A1"
+		if (pieceCounter == 1): return "A8"
+		if (pieceCounter == 2): return "H1"
+		if (pieceCounter == 3): return "H8"
+		
+
 	if (pieceName.begins_with("King")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if (pieceCounter == 0): return "E1"
+		if (pieceCounter == 1): return "E8"
+
 	if (pieceName.begins_with("Queen")):
-		return String(char(int(pieceName[pieceName.length() - 1]) + 47)) + "2"
+		if (pieceCounter == 0): return "D1"
+		if (pieceCounter == 1): return "D8"
+
 
 
 
@@ -75,7 +128,22 @@ func givePiecesTextures():
 		p.get_child(0).set_region(1)
 		p.get_child(0).set_region_rect(pieceFromSpriteSheet)
 		p.get_child(0).texture = tex
+		p.get_child(0).centered = 0
 		p.get_child(0).set_scale(Vector2(boardScale, boardScale))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -95,19 +163,19 @@ func givePiecesTextures():
 func updateBoardRect():
 	var windowSize = get_viewport().size
 	var centerWindow = Vector2(windowSize[0] / 2, windowSize[1] / 2)
-
+	get_node("BoardTexture").centered = 0
+	
 	#transform center of board into center of screen
 	get_node("BoardTexture").position = centerWindow
 
 	#scale, so that the board height is 80% of the screen height, centered
-	var newHeight = 0.80 * windowSize[1]
+	var newHeight = 0.50 * windowSize[1]
 	var newScale = newHeight / get_node("BoardTexture").get_rect().size[1]
 	get_node("BoardTexture").set_scale(Vector2(newScale, newScale))
 	
 	#update these class elements
 	boardRect.position = get_node("BoardTexture").position
 	boardRect.size = get_node("BoardTexture").get_rect().size
-	print(boardRect)
 	boardScale = newScale
 
 
@@ -117,6 +185,35 @@ func _on_BoardTexture_ready():
 
 func myfunc():
 	print("Resizing: ", get_viewport().size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 func calculateSquareCoords(rank, file):
@@ -143,7 +240,26 @@ func createSquares():
 func startPiecesOnSquares():
 	for p in pieces:
 		p.position = squares[findSquareFromPiece(p.name)].position
+		print(p.name, ", ", findSquareFromPiece(p.name))
 		pass # <-------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func startBoard():
 	createPiece("Pawn", 16)
