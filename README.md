@@ -2,11 +2,17 @@
  working on this to keep me busy
 
 got the pieces to be the right size
-pieces are taken from an imprecise rect of the spritesheet
 got all the pieces to the correct "Squares"
+fixed `boardRect` so it updates correctly now
+all pieces have correct texutres
 
-debugging:  all pieces are using the pawn texture
+pieces now take up entire square
+centered the pieces on their respective squares
+board sits at an imprecise (although correct) distance from the corner of the window
+
+debugging:  
 
 TODO: 
-    redefine how the "spaces" are calculated so that they are actually on the boardlol
+    
+    make pieces draggable
     
