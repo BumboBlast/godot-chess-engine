@@ -5,32 +5,10 @@ extends Node2D
 var boardRect = Rect2(0,0,0,0)
 var boardScale
 
-var pieces = []
-const PIECEARTPIXELS = Vector2(7,7) #pixels
+
+
+
 const BOARDARTPIXELS = Vector2(80,80) #pixels
-var pieceSize = Vector2(7,7) #pixels
-
-"""
-1. create piece nodes
-"""
-func instanceNode2D(name):
-	#make the nodes themselves
-	var piece = Node2D.new()
-	piece.set_name(name)
-	
-	#give them sprite-nodes
-	var sprite = Sprite.new()
-	piece.add_child(sprite)
-	sprite.set_name(name + " sprite")
-	
-	add_child(piece)
-	pieces.push_back(piece)
-
-
-func createPiece(name, amount):
-	for n in amount:
-		var pieceName = name + String(n)
-		instanceNode2D(pieceName)
 
 
 
@@ -61,39 +39,9 @@ func createPiece(name, amount):
 
 
 
-func findSpriteSheetRect(pieceName):
-	var pieceParity = int(pieceName[pieceName.length() - 1])
-	var spriteSize = PIECEARTPIXELS #in pixels
-	if (pieceName.begins_with("Pawn")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 0, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 0, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
-	if (pieceName.begins_with("King")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 1, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 1, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
-	if (pieceName.begins_with("Bishop")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 2, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 2, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
-	if (pieceName.begins_with("Knight")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 3, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 3, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
-	if (pieceName.begins_with("Rook")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 4, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 4, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
-	if (pieceName.begins_with("Queen")):
-		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 5, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
-		else:
-			return Rect2(spriteSize[0] * 5, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+
+
+
 
 
 
@@ -171,18 +119,18 @@ func findStartSquare(pieceName):
 
 func givePiecesTextures():
 	var tex = load("res://art/debugPiecesSpriteSheet1.png")
-	var pieceScale = (boardRect.size[0] / 8) / pieceSize[0]  # makes pieces exactly the same size as board squares
+	var pieceScale = (boardRect.size[0] / 8) / get_node("Pieces").pieceSize[0]  # makes pieces exactly the same size as board squares
 	# idk why that workdd
 	
-	for p in pieces:
-		var pieceFromSpriteSheet = findSpriteSheetRect(p.name)
+	for p in get_node("Pieces").pieces:
+		var pieceFromSpriteSheet = get_node("Pieces").findSpriteSheetRect(p.name)
 		
 		p.get_child(0).set_region(1)
 		p.get_child(0).set_region_rect(pieceFromSpriteSheet)
 		p.get_child(0).texture = tex
 		p.get_child(0).centered = 0
 		p.get_child(0).set_scale(Vector2(pieceScale , pieceScale))
-		pieceSize = PIECEARTPIXELS * (pieceScale)
+		get_node("Pieces").pieceSize = get_node("Pieces").PIECEARTPIXELS * (pieceScale)
 
 
 
@@ -272,8 +220,8 @@ func myfunc():
 
 func placePieceOnSquare(piece, squareName):
 	var squareAnchor = squares[squareName]
-	var difLength = (squareAnchor.size[0] - pieceSize[0]) / 2
-	var difHeight = (squareAnchor.size[1] - pieceSize[1]) / 2
+	var difLength = (squareAnchor.size[0] - get_node("Pieces").pieceSize[0]) / 2
+	var difHeight = (squareAnchor.size[1] - get_node("Pieces").pieceSize[1]) / 2
 	var centeredAnchor = Vector2(
 		squareAnchor.position[0] + difLength,
 		squareAnchor.position[1] + difHeight
@@ -302,7 +250,7 @@ func createSquares():
 			#print(rank, file, newSquare, ",", squares[newSquare])
 
 func startPiecesOnSquares():
-	for p in pieces:
+	for p in get_node("Pieces").pieces:
 		placePieceOnSquare(p, findStartSquare(p.name))
 
 
@@ -324,14 +272,9 @@ func startPiecesOnSquares():
 
 
 func startBoard():
-	createPiece("Pawn", 16)
-	createPiece("Rook", 4)
-	createPiece("Knight", 4)
-	createPiece("Bishop", 4)
-	createPiece("King", 2)
-	createPiece("Queen", 2)
-	givePiecesTextures()
 	createSquares()
+	get_node("Pieces").instancePieces()
+	get_node("Pieces").givePiecesTextures()
 	startPiecesOnSquares()
 
 
