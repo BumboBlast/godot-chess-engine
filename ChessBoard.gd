@@ -1,74 +1,38 @@
 extends Node2D
 
 
-
 var boardRect = Rect2(0,0,0,0)
 var boardScale
-
-
-
 
 const BOARDARTPIXELS = Vector2(80,80) #pixels
 
 
 
 
+var squares = {}
 
+func calculateSquareCoords(rank, file):
+	var rankHeight = boardRect.size[1] / 8
+	var fileLength = boardRect.size[0] / 8
+	
+	var squareXPos = boardRect.position[0] + (fileLength * rank)
+	var squareYPos = boardRect.position[1] + (rankHeight * file)
+	var squareWidth = fileLength
+	var squareHeight = rankHeight
+	
+	return Rect2(squareXPos, squareYPos, squareWidth, squareHeight)
 
+func createSquares():
+	
+	for rank in 8:
+		for file in 8:
+			var newSquare = String(char(rank + 65)) + String(char(file + 49))
+			squares[newSquare] = calculateSquareCoords(rank, file)
+			#print(rank, file, newSquare, ",", squares[newSquare])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+func startPiecesOnSquares():
+	for p in get_node("Pieces").pieces:
+		placePieceOnSquare(p, findStartSquare(p.name))
 
 
 
@@ -141,19 +105,6 @@ func givePiecesTextures():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
 2a. make a list of board locations
 2b. set piece textures and starting positions on the board
@@ -193,31 +144,6 @@ func myfunc():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 func placePieceOnSquare(piece, squareName):
 	var squareAnchor = squares[squareName]
 	var difLength = (squareAnchor.size[0] - get_node("Pieces").pieceSize[0]) / 2
@@ -227,45 +153,6 @@ func placePieceOnSquare(piece, squareName):
 		squareAnchor.position[1] + difHeight
 	) 
 	piece.position = centeredAnchor
-
-func calculateSquareCoords(rank, file):
-	var rankHeight = boardRect.size[1] / 8
-	var fileLength = boardRect.size[0] / 8
-	
-	var squareXPos = boardRect.position[0] + (fileLength * rank)
-	var squareYPos = boardRect.position[1] + (rankHeight * file)
-	var squareWidth = fileLength
-	var squareHeight = rankHeight
-	
-	return Rect2(squareXPos, squareYPos, squareWidth, squareHeight)
-			
-
-var squares = {}
-func createSquares():
-	
-	for rank in 8:
-		for file in 8:
-			var newSquare = String(char(rank + 65)) + String(char(file + 49))
-			squares[newSquare] = calculateSquareCoords(rank, file)
-			#print(rank, file, newSquare, ",", squares[newSquare])
-
-func startPiecesOnSquares():
-	for p in get_node("Pieces").pieces:
-		placePieceOnSquare(p, findStartSquare(p.name))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

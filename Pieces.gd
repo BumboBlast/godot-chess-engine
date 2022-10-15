@@ -1,9 +1,7 @@
 extends Node
 
-onready var boardRect = get_parent().boardRect
-var pieceSize = Vector2(7,7) #pixels
-
-const PIECEARTPIXELS = Vector2(7,7)
+var pieceSize = Vector2(7,7) #pixels, mutable
+const PIECEARTPIXELS = Vector2(7,7) #pixels
 
 
 var pieces = []
@@ -40,46 +38,53 @@ func instancePieces():
 	createPiece("King", 2)
 	createPiece("Queen", 2)
 
-
+#------------------------------------------------------------------------------
 func findSpriteSheetRect(pieceName):
 	var pieceParity = int(pieceName[pieceName.length() - 1])
 	var spriteSize = PIECEARTPIXELS #in pixels
+	
+	#	offset to locate the sprite from the spritesheet
+	# 	will be multiplied by how many sprites over it is located
+	# 	its a square so only one dimension is used
+	var shoffx = spriteSize[0]
+	
+	
 	if (pieceName.begins_with("Pawn")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 0, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 0, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 0, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 0, shoffx * 1, shoffx, shoffx)
 	if (pieceName.begins_with("King")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 1, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 1, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 1, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 1, shoffx * 1, shoffx, shoffx)
 	if (pieceName.begins_with("Bishop")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 2, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 2, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 2, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 2, shoffx * 1, shoffx, shoffx)
 	if (pieceName.begins_with("Knight")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 3, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 3, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 3, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 3, shoffx * 1, shoffx, shoffx)
 	if (pieceName.begins_with("Rook")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 4, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 4, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 4, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 4, shoffx * 1, shoffx, shoffx)
 	if (pieceName.begins_with("Queen")):
 		if (pieceParity % 2 == 0):
-			return Rect2(spriteSize[0] * 5, spriteSize[0] * 0, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 5, shoffx * 0, shoffx, shoffx)
 		else:
-			return Rect2(spriteSize[0] * 5, spriteSize[0] * 1, spriteSize[0], spriteSize[1])
+			return Rect2(shoffx * 5, shoffx * 1, shoffx, shoffx)
 
 
 
 func givePiecesTextures():
 	var tex = load("res://art/debugPiecesSpriteSheet1.png")
-	var pieceScale = (boardRect.size[0] / 8) / pieceSize[0]  # makes pieces exactly the same size as board squares
+	var pieceScale = (get_parent().boardRect.size[0] / 8) / pieceSize[0]  # makes pieces exactly the same size as board squares
 	# idk why that workdd
 	
 	for p in pieces:

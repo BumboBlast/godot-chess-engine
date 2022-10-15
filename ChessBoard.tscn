@@ -5,19 +5,21 @@
 [ext_resource path="res://ChessBoard.gd" type="Script" id=3]
 [ext_resource path="res://Pieces.gd" type="Script" id=4]
 
-[node name="ChessBoard" type="Node2D"]
+[node name="Rules" type="Node"]
+
+[node name="ChessBoard" type="Node2D" parent="."]
 script = ExtResource( 3 )
 
-[node name="BoardTexture" type="Sprite" parent="."]
+[node name="BoardTexture" type="Sprite" parent="ChessBoard"]
 position = Vector2( 499.237, 280.97 )
 scale = Vector2( 4.55181, 4.1748 )
 texture = ExtResource( 1 )
 
-[node name="Pieces" type="Node" parent="."]
+[node name="Pieces" type="Node" parent="ChessBoard"]
 script = ExtResource( 4 )
 
-[node name="PiecesTextTileMap" type="Sprite" parent="Pieces"]
+[node name="PiecesTextTileMap" type="Sprite" parent="ChessBoard/Pieces"]
 visible = false
 texture = ExtResource( 2 )
 
-[connection signal="ready" from="BoardTexture" to="." method="_on_BoardTexture_ready"]
+[connection signal="ready" from="ChessBoard/BoardTexture" to="ChessBoard" method="_on_BoardTexture_ready"]
