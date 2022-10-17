@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://art/debugPiecesSpriteSheet1.png" type="Texture" id=1]
+[ext_resource path="res://Piece.gd" type="Script" id=2]
+
+[node name="Piece" type="Area2D"]
+script = ExtResource( 2 )
+
+[node name="PieceCollision" type="CollisionShape2D" parent="."]
+visible = false
+
+[node name="PieceSprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false

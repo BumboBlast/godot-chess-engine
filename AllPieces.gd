@@ -1,53 +1,35 @@
 extends Node
 
-var pieceSize = Vector2(7,7) #pixels, mutable
-const PIECEARTPIXELS = Vector2(7,7) #pixels
+# mother of all pieces
+# contains all spritesheet info for each piece
 
+var allPieces = []
+var scene = load("res://Piece.tscn")
 
-var pieces = []
-
-
-"""
-1. create piece nodes
-"""
-func instanceNode2D(name):
-	#make the nodes themselves
-	var piece = Node2D.new()
-	piece.set_name(name)
-	
-	#give them sprite-nodes
-	var sprite = Sprite.new()
-	piece.add_child(sprite)
-	sprite.set_name(name + " sprite")
-	
-	add_child(piece)
-	pieces.push_back(piece)
-
-
-func createPiece(name, amount):
+func createPiece(pieceName: String, amount: int, pos: Vector2):
 	for n in amount:
-		var pieceName = name + String(n)
-		instanceNode2D(pieceName)
+		var newPiece = scene.instance()
+		
+		newPiece.name = pieceName + String(n)
+		newPiece.get_child(1).name = newPiece.name + "Sprite"
+		newPiece.set_position(pos)
+		newPiece.get_child(1).scale = get_parent().scale # CVHANGE THIS SO SAME SIZE AS SQUARE
+		newPiece.loadTexture(findSpriteSheetRect(newPiece.name))
 
+		newPiece.visible = true
+		add_child(newPiece)
+		
+		allPieces.push_back(newPiece)
 
-func instancePieces():
-	createPiece("Pawn", 16)
-	createPiece("Rook", 4)
-	createPiece("Knight", 4)
-	createPiece("Bishop", 4)
-	createPiece("King", 2)
-	createPiece("Queen", 2)
-
-#------------------------------------------------------------------------------
-func findSpriteSheetRect(pieceName):
+func findSpriteSheetRect(pieceName: String):
+	
 	var pieceParity = int(pieceName[pieceName.length() - 1])
-	var spriteSize = PIECEARTPIXELS #in pixels
+	var spriteSize =  7 #in pixels
 	
 	#	offset to locate the sprite from the spritesheet
 	# 	will be multiplied by how many sprites over it is located
 	# 	its a square so only one dimension is used
-	var shoffx = spriteSize[0]
-	
+	var shoffx = spriteSize
 	
 	if (pieceName.begins_with("Pawn")):
 		if (pieceParity % 2 == 0):
@@ -81,28 +63,21 @@ func findSpriteSheetRect(pieceName):
 			return Rect2(shoffx * 5, shoffx * 1, shoffx, shoffx)
 
 
-
-func givePiecesTextures():
-	var tex = load("res://art/debugPiecesSpriteSheet1.png")
-	var pieceScale = (get_parent().boardRect.size[0] / 8) / pieceSize[0]  # makes pieces exactly the same size as board squares
-	# idk why that workdd
+func intializeAllPieces():
+	var defaultPos =  Vector2(100,100)
+	createPiece("Pawn", 16, defaultPos)
+	createPiece("Knight", 4, defaultPos)
+	createPiece("Bishop", 4, defaultPos)
+	createPiece("Rook", 4, defaultPos)
+	createPiece("King", 2, defaultPos)
+	createPiece("Queen", 2, defaultPos)
 	
-	for p in pieces:
-		var pieceFromSpriteSheet = findSpriteSheetRect(p.name)
-		
-		p.get_child(0).set_region(1)
-		p.get_child(0).set_region_rect(pieceFromSpriteSheet)
-		p.get_child(0).texture = tex
-		p.get_child(0).centered = 0
-		p.get_child(0).set_scale(Vector2(pieceScale , pieceScale))
-		pieceSize = PIECEARTPIXELS * (pieceScale)
-
-
-
+	print(allPieces[10].name, allPieces[10].position, allPieces[10].get_child(1).visible)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	intializeAllPieces()
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
