@@ -3,6 +3,22 @@ extends Area2D
 # AllPieces will contain specfic nuances about difference bettwen pieces 
 # (names, where they are on the spritesheet)
 
+
+
+
+"""
+	Piece Properties
+"""
+var spriteRect = Rect2(
+	0, 0, 0, 0
+)
+
+
+
+"""
+	Piece methods
+"""
+
 func calculate_sprite_location(pieceName: String, spriteLength, spriteHeight):
 	
 	# this value determines whether or not the piece is black or white
@@ -39,6 +55,11 @@ func calculate_sprite_location(pieceName: String, spriteLength, spriteHeight):
 			return Vector2(spriteLength * 5, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 5, spriteHeight * 1)
+	return Vector2(spriteLength * 0, spriteHeight * 0) # default value
+
+
+
+
 
 func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
 	
@@ -53,6 +74,10 @@ func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
 	)
 	return spriteSheetRect
 
+
+
+
+
 func loadTexture():
 	var tex = load("res://art/debugPiecesSpriteSheet1.png")
 	
@@ -65,11 +90,29 @@ func loadTexture():
 
 
 
+
+
+# update the variable storing the size of the texture
+# this is used to pass to other objects incase they want it
+# be sure to call this whenever you update art or like boardsizes or something
+# also make sure the texture is same place as parent node! (idk why)
+func update_piece_sprite_rect():
+	self.spriteRect = Rect2(
+		$PieceSprite.get_position(),
+		$PieceSprite.get_texture().get_size() * $PieceSprite.get_scale()
+	)
+	self.set_position(spriteRect.position)
+
+
+
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	self.set_name("King2")
+	self.name = "Bishop4"
 	
 	loadTexture()
+	update_piece_sprite_rect()
 	pass # Replace with function body.
 
