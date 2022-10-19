@@ -87,15 +87,15 @@ func set_board_position(percentWindowW, percentWindowH):
 # origin + coordinate_offset
 func calculate_square_coords(rankFile):
 	# char -> int 'A' is 0. '1' is 0
-	var rank = ord(rankFile[0]) - 65
-	var file = ord(rankFile[1]) - 49
+	var file = ord(rankFile[0]) - 65
+	var rank = 7 - (ord(rankFile[1]) - 49)
 
 	var rankHeight = spriteRect.size[0] / 8
 	var fileLength = spriteRect.size[0] / 8
 	
 	# looks like A1 is top left
-	var squareXPos = spriteRect.position[0] + (fileLength * rank)
-	var squareYPos = spriteRect.position[1] + (rankHeight * file)
+	var squareXPos = spriteRect.position[0] + (fileLength * file)
+	var squareYPos = spriteRect.position[1] + (rankHeight * rank)
 	var squareWidth = fileLength
 	var squareHeight = rankHeight
 	
@@ -105,6 +105,9 @@ func calculate_square_coords(rankFile):
 
 
 
+# make sure all the nodes are named uniquely
+# if knight3 exists, will instance knight4
+# this is probably prone to bugs but it works atm
 func increment_name(pieceName: String):
 	var increment = 1
 	
@@ -118,6 +121,7 @@ func increment_name(pieceName: String):
 
 
 
+# instantiate piece object, store into container
 func instance_piece(name: String, parity: String):
 	var newPiece = NEWPIECE.instance()
 	newPiece.set_name(increment_name(name))
@@ -169,11 +173,45 @@ func wipeBoard():
 
 
 
-
+# adds pieces to the board based on FEN string
 func loadFen(fen: String):
+	"""
+	Giocco Piano Opening
+	r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
+	"""
+	
 	wipeBoard()
-	pass
-
+	
+	var rank = 1
+	var file = 8
+	
+	for ch in fen:
+		
+		var space = String(char(rank + 64)) + String(char(file + 48))
+		
+		# if character is a letter
+		if (ch == 'p'): add_piece("Pawn", "Dark", space)
+		if (ch == 'P'): add_piece("Pawn", "Light", space)
+		if (ch == 'n'): add_piece("Knight", "Dark", space)
+		if (ch == 'N'): add_piece("Knight", "Light", space)
+		if (ch == 'b'): add_piece("Bishop", "Dark", space)
+		if (ch == 'B'): add_piece("Bishop", "Light", space)
+		if (ch == 'r'): add_piece("Rook", "Dark", space)
+		if (ch == 'R'): add_piece("Rook", "Light", space)
+		if (ch == 'k'): add_piece("King", "Dark", space)
+		if (ch == 'K'): add_piece("King", "Light", space)
+		if (ch == 'q'): add_piece("Queen", "Dark", space)
+		if (ch == 'Q'): add_piece("Queen", "Light", space)
+		
+		if (ch.is_valid_integer()):
+			rank = rank + int(ch)
+			continue
+		
+		# increment file
+		if (ch == '/'):
+			file = file - 1
+			rank = 0
+		rank = rank + 1
 
 
 
@@ -184,14 +222,10 @@ func _ready():
 	set_board_size(0.80)
 	set_board_position(0.10, 0.10)
 	
+	loadFen("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1")
 	
+
 	
-	
-	add_piece("Bishop", "Dark", "C3")
-	add_piece("Knight", "Light", "H8")
-	add_piece("Knight", "Dark", "D6")
-	add_piece("Knight", "Dark", "C6")
-	add_piece("Knight", "Light", "B6")
 
 
 
