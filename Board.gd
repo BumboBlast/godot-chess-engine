@@ -11,10 +11,17 @@ extends Sprite
 """
 	Board Properties
 """
+# stores updated piece dimensions to pass to other classes
 onready var spriteRect = Rect2(
 	self.get_position(),
 	self.texture.get_size() * self.get_scale()
 )
+
+# piece object to instantiate dynamically
+const NEWPIECE = preload("res://Piece.tscn")
+
+# stores all the piece objects to iterate over
+var allPieces = []
 
 
 
@@ -24,6 +31,7 @@ onready var spriteRect = Rect2(
 	Board methods
 """
 
+# call each time you change board size or position
 func update_board_sprite_rect():
 	self.spriteRect = Rect2(
 		self.get_position(),
@@ -69,6 +77,64 @@ func set_board_position(percentWindowW, percentWindowH):
 		windowHeight - (boardHeight + (percentWindowDiffH))	
 	)
 	self.set_position(newPos)
+	update_board_sprite_rect()
+
+
+
+
+
+# return pixel coordinate relative to board's origin
+# origin + coordinate_offset
+func calculate_square_coords(rankFile):
+	# char -> int 'A' is 0. '1' is 0
+	var rank = ord(rankFile[0]) - 65
+	var file = ord(rankFile[1]) - 49
+
+	var rankHeight = spriteRect.size[0] / 8
+	var fileLength = spriteRect.size[0] / 8
+	
+	# looks like A1 is top left
+	var squareXPos = spriteRect.position[0] + (fileLength * rank)
+	var squareYPos = spriteRect.position[1] + (rankHeight * file)
+	var squareWidth = fileLength
+	var squareHeight = rankHeight
+	
+	return Rect2(squareXPos, squareYPos, squareWidth, squareHeight)
+
+
+
+
+
+func instance_piece(name: String, parity: String):
+	var newPiece = NEWPIECE.instance()
+	newPiece.set_name(name)
+	if (parity == "Dark"):
+		newPiece.parity = true
+	else:
+		newPiece.parity = false
+	
+	newPiece.loadTexture()
+	$AllPieces.add_child(newPiece)
+	allPieces.append(newPiece)
+
+
+
+
+
+# sets the piece's (and it's sprite's) position to the square rect's 
+func place_piece(piece, square: String):
+	var target_square = calculate_square_coords(square)
+	piece.get_node("PieceSprite").set_position(target_square.position)
+	#piece.update_piece_sprite_rect()
+
+
+
+
+
+# adds a piece to the board (and to the piece array)
+func add_piece(name: String, parity: String, square: String):
+	instance_piece(name, parity)
+	place_piece(allPieces.back(), square)
 
 
 
@@ -79,6 +145,7 @@ func _ready():
 	set_board_size(0.80)
 	set_board_position(0.10, 0.10)
 	
-	pass
+	add_piece("Bishop", "Dark", "C3")
+
 
 

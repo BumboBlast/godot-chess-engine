@@ -9,9 +9,14 @@ extends Area2D
 """
 	Piece Properties
 """
+# stores the boundry of the sprite
 var spriteRect = Rect2(
 	0, 0, 0, 0
 )
+
+# false = light, true = dark
+# default true/dark
+var parity = true
 
 
 
@@ -20,38 +25,34 @@ var spriteRect = Rect2(
 """
 
 func calculate_sprite_location(pieceName: String, spriteLength, spriteHeight):
-	
-	# this value determines whether or not the piece is black or white
-	# (odd values are black, even values are white
-	var pieceParity = int(pieceName[pieceName.length() - 1])
-	
+
 	if (pieceName.begins_with("Pawn")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 0, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 0, spriteHeight * 1)
 	if (pieceName.begins_with("King")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 1, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 1, spriteHeight * 1)
 	if (pieceName.begins_with("Bishop")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 2, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 2, spriteHeight * 1)
 	if (pieceName.begins_with("Knight")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 3, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 3, spriteHeight * 1)
 	if (pieceName.begins_with("Rook")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 4, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 4, spriteHeight * 1)
 	if (pieceName.begins_with("Queen")):
-		if (pieceParity % 2 == 1):
+		if (self.parity):
 			return Vector2(spriteLength * 5, spriteHeight * 0)
 		else:
 			return Vector2(spriteLength * 5, spriteHeight * 1)
@@ -78,6 +79,21 @@ func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
 
 
 
+# update the variable storing the size of the texture
+# this is used to pass to other objects incase they want it
+# be sure to call this whenever you update art or like boardsizes or something
+# also make sure the texture is same place as parent node! (idk why)
+func update_piece_sprite_rect():
+	self.spriteRect = Rect2(
+		self.get_position(),
+		$PieceSprite.get_texture().get_size() * self.get_scale()
+	)
+	# node and sprite should share same coords (weird)
+
+
+
+
+
 func loadTexture():
 	var tex = load("res://art/debugPiecesSpriteSheet1.png")
 	
@@ -87,21 +103,7 @@ func loadTexture():
 	$PieceSprite.texture = tex
 	$PieceSprite.set_region(true)
 	$PieceSprite.set_region_rect(spriteSheetRect)
-
-
-
-
-
-# update the variable storing the size of the texture
-# this is used to pass to other objects incase they want it
-# be sure to call this whenever you update art or like boardsizes or something
-# also make sure the texture is same place as parent node! (idk why)
-func update_piece_sprite_rect():
-	self.spriteRect = Rect2(
-		$PieceSprite.get_position(),
-		$PieceSprite.get_texture().get_size() * $PieceSprite.get_scale()
-	)
-	self.set_position(spriteRect.position)
+	update_piece_sprite_rect()
 
 
 
@@ -109,10 +111,5 @@ func update_piece_sprite_rect():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	self.name = "Bishop4"
-	
-	loadTexture()
-	update_piece_sprite_rect()
 	pass # Replace with function body.
 

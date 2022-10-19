@@ -8,6 +8,8 @@ func set_board_position(percentWindowW, percentWindowH):
 func set_board_size(percentWindowH):
 func update_board_sprite_rect():
 
+func calculate_square_coords(rankFile):
+
 [x] piece load texture (piece)
 [] instance pieces (all pieces)
 [] place piece function (all pieces)
