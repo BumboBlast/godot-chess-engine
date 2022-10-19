@@ -86,7 +86,7 @@ func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
 func update_piece_sprite_rect():
 	self.spriteRect = Rect2(
 		self.get_position(),
-		$PieceSprite.get_texture().get_size() * self.get_scale()
+		$PieceSprite.get_region_rect().size * self.get_scale()
 	)
 	# node and sprite should share same coords (weird)
 
@@ -103,6 +103,12 @@ func loadTexture():
 	$PieceSprite.texture = tex
 	$PieceSprite.set_region(true)
 	$PieceSprite.set_region_rect(spriteSheetRect)
+	$PieceSprite.visible = true
+	
+	#board scale
+	var new_scale = get_parent().get_parent().get_scale()
+	
+	$PieceSprite.set_scale(new_scale)
 	update_piece_sprite_rect()
 
 

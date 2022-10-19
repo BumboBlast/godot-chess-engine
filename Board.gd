@@ -105,16 +105,31 @@ func calculate_square_coords(rankFile):
 
 
 
+func increment_name(pieceName: String):
+	var increment = 1
+	
+	for p in $AllPieces.get_children():
+		if (p.name.begins_with(pieceName)):
+			increment = increment + 1
+	
+	return pieceName + String(increment)
+
+
+
+
+
 func instance_piece(name: String, parity: String):
 	var newPiece = NEWPIECE.instance()
-	newPiece.set_name(name)
+	newPiece.set_name(increment_name(name))
+	$AllPieces.add_child(newPiece)
+	
+	
 	if (parity == "Dark"):
 		newPiece.parity = true
 	else:
 		newPiece.parity = false
 	
 	newPiece.loadTexture()
-	$AllPieces.add_child(newPiece)
 	allPieces.append(newPiece)
 
 
@@ -139,13 +154,45 @@ func add_piece(name: String, parity: String, square: String):
 
 
 
+# clear all the pieces from all containers
+# free all piece nodes from memory
+func wipeBoard():
+	for p in $AllPieces.get_children():
+		
+		for _index in range(0, self.allPieces.size()):
+			if (p == allPieces[_index]):
+				allPieces.remove(_index)
+				break
+		
+		p.queue_free()
+
+
+
+
+
+func loadFen(fen: String):
+	wipeBoard()
+	pass
+
+
+
+
+
 
 func _ready():
 	
 	set_board_size(0.80)
 	set_board_position(0.10, 0.10)
 	
+	
+	
+	
 	add_piece("Bishop", "Dark", "C3")
+	add_piece("Knight", "Light", "H8")
+	add_piece("Knight", "Dark", "D6")
+	add_piece("Knight", "Dark", "C6")
+	add_piece("Knight", "Light", "B6")
+
 
 
 
