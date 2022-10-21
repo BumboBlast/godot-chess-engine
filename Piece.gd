@@ -9,6 +9,8 @@ extends Area2D
 """
 	Piece Properties
 """
+
+
 # stores the boundry of the sprite
 var spriteRect = Rect2(
 	0, 0, 0, 0
@@ -89,6 +91,10 @@ func update_piece_sprite_rect():
 		$PieceSprite.get_region_rect().size * self.get_scale()
 	)
 	# node and sprite should share same coords (weird)
+	
+	# collision is the same shape as texture rect
+	$PieceCollision
+	print($PieceSprite.position)
 
 
 
@@ -114,8 +120,21 @@ func loadTexture():
 
 
 
+"""
+Event Handlers
+"""
+
+
+
+
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+
 	pass # Replace with function body.
+
+
 

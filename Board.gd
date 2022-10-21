@@ -143,7 +143,7 @@ func instance_piece(name: String, parity: String):
 # sets the piece's (and it's sprite's) position to the square rect's 
 func place_piece(piece, square: String):
 	var target_square = calculate_square_coords(square)
-	piece.get_node("PieceSprite").set_position(target_square.position)
+	piece.set_position(target_square.position)
 	#piece.update_piece_sprite_rect()
 
 
@@ -154,6 +154,7 @@ func place_piece(piece, square: String):
 func add_piece(name: String, parity: String, square: String):
 	instance_piece(name, parity)
 	place_piece(allPieces.back(), square)
+
 
 
 
@@ -173,20 +174,21 @@ func wipeBoard():
 
 
 
+
 # adds pieces to the board based on FEN string
+# [x]Piece Placement - only add pieces in the middle portion
+# []Active Color
+# []Castling Rights
+# []Possible En Passant Targets
+# []Halfmove Clock
+# []Fullmove Number
 func loadFen(fen: String):
-	"""
-	Giocco Piano Opening
-	r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
-	"""
-	
 	wipeBoard()
 	
 	var rank = 1
 	var file = 8
 	
 	for ch in fen:
-		
 		var space = String(char(rank + 64)) + String(char(file + 48))
 		
 		# if character is a letter
@@ -203,6 +205,7 @@ func loadFen(fen: String):
 		if (ch == 'q'): add_piece("Queen", "Dark", space)
 		if (ch == 'Q'): add_piece("Queen", "Light", space)
 		
+		# how many spaces between next Piece
 		if (ch.is_valid_integer()):
 			rank = rank + int(ch)
 			continue
@@ -219,10 +222,11 @@ func loadFen(fen: String):
 
 func _ready():
 	
-	set_board_size(0.80)
-	set_board_position(0.10, 0.10)
 	
-	loadFen("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1")
+	pass
+	
+	
+	# giocco piano opening
 	
 
 	

@@ -1,24 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Piece.tscn" type="PackedScene" id=1]
-[ext_resource path="res://art/boardPinkMaroonNOBORDERS.png" type="Texture" id=2]
-[ext_resource path="res://AllPieces.gd" type="Script" id=3]
-[ext_resource path="res://Board.gd" type="Script" id=4]
-[ext_resource path="res://Rules.gd" type="Script" id=5]
+[ext_resource path="res://Board.tscn" type="PackedScene" id=1]
+[ext_resource path="res://REALchess.gd" type="Script" id=2]
 
 [node name="REALchess" type="Node"]
+script = ExtResource( 2 )
 
 [node name="Rules" type="Node" parent="."]
-script = ExtResource( 5 )
 
-[node name="Board" type="Sprite" parent="Rules"]
-position = Vector2( 511.936, 263.508 )
-scale = Vector2( 5.46456, 5.46456 )
-texture = ExtResource( 2 )
-script = ExtResource( 4 )
-
-[node name="Piece" parent="Rules/Board" instance=ExtResource( 1 )]
-visible = false
-
-[node name="AllPieces" type="Node" parent="Rules/Board"]
-script = ExtResource( 3 )
+[node name="Board" parent="." instance=ExtResource( 1 )]
