@@ -12,5 +12,4 @@ func _ready():
 
 # calls at the top of every frame
 func _process(delta):
-	
 	pass

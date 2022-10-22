@@ -22,9 +22,16 @@ func increment_name(pieceName: String):
 
 [x] piece load texture (piece)
 [] make the pieces take up the whole square, AND center onto the square
-[] instance pieces (all pieces)
-[] place piece function (all pieces)
+[x] instance pieces (all pieces)
+[x] place piece function (all pieces)
+[] make collison a precise positon/size
 
+[] event handler:
+    [] collision works
+    [] clicking works
+    [] dragging works
+
+    
 debugging:  
 
 TODO: 

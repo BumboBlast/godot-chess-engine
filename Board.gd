@@ -144,7 +144,8 @@ func instance_piece(name: String, parity: String):
 func place_piece(piece, square: String):
 	var target_square = calculate_square_coords(square)
 	piece.set_position(target_square.position)
-	#piece.update_piece_sprite_rect()
+	print(piece.name, " places at square: ", square )
+	piece.update_piece_sprite_rect()
 
 
 

@@ -5,6 +5,7 @@
 [ext_resource path="res://Board.gd" type="Script" id=5]
 
 [node name="Board" type="Sprite"]
+visible = false
 position = Vector2( 511.936, 263.508 )
 scale = Vector2( 5.46456, 5.46456 )
 texture = ExtResource( 3 )

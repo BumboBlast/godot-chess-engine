@@ -93,8 +93,6 @@ func update_piece_sprite_rect():
 	# node and sprite should share same coords (weird)
 	
 	# collision is the same shape as texture rect
-	$PieceCollision
-	print($PieceSprite.position)
 
 
 
@@ -114,7 +112,7 @@ func loadTexture():
 	#board scale
 	var new_scale = get_parent().get_parent().get_scale()
 	
-	$PieceSprite.set_scale(new_scale)
+	self.set_scale(new_scale)
 	update_piece_sprite_rect()
 
 
@@ -138,3 +136,13 @@ func _ready():
 
 
 
+
+
+func _on_Piece_mouse_entered():
+	print("PIECE mouse entered")
+	pass # Replace with function body.
+
+
+func _on_Piece_mouse_exited():
+	print("PIECE mouse exited")
+	pass # Replace with function body.
