@@ -12,7 +12,7 @@ extends Area2D
 
 
 # stores the boundry of the sprite
-var spriteRect = Rect2(
+var sprite_rect = Rect2(
 	0, 0, 0, 0
 )
 
@@ -20,6 +20,7 @@ var spriteRect = Rect2(
 # default true/dark
 var parity = true
 
+var selected = false
 
 
 """
@@ -86,12 +87,12 @@ func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
 # be sure to call this whenever you update art or like boardsizes or something
 # also make sure the texture is same place as parent node! (idk why)
 func update_piece_sprite_rect():
-	self.spriteRect = Rect2(
+	self.sprite_rect = Rect2(
 		self.get_position(),
 		$PieceSprite.get_region_rect().size * self.get_scale()
 	)
 	# node and sprite should share same coords (weird)
-	
+	print(sprite_rect.size)
 	# collision is the same shape as texture rect
 
 
@@ -122,7 +123,48 @@ func loadTexture():
 Event Handlers
 """
 
+func _on_Piece_mouse_entered():
+	print("PIECE mouse entered")
+	
 
+
+
+
+
+func _on_Piece_mouse_exited():
+	print("PIECE mouse exited")
+	
+
+
+
+
+# only captures input events with concern to the collision node
+func _on_Piece_input_event(viewport, event, shape_idx):
+	if (Input.is_action_pressed("ui_left_mouse")):
+		
+		# after click, want piece's CENTER to SNAP to mouse positon
+		global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
+		self.selected = true
+
+
+
+# captures all input events
+func _input(event):
+	if (event is InputEventMouseButton):
+		if (event.button_index == BUTTON_LEFT and not event.pressed):
+			self.selected = false
+
+
+
+
+
+func _physics_process(delta):
+	if (selected == true):
+		
+		# 25 * delta fixes the movement to the frame rate
+		# the center follows the cursor
+		global_position = lerp(global_position, get_global_mouse_position() - (self.sprite_rect.size / 2), 25 * delta)
+		
 
 
 
@@ -138,11 +180,4 @@ func _ready():
 
 
 
-func _on_Piece_mouse_entered():
-	print("PIECE mouse entered")
-	pass # Replace with function body.
 
-
-func _on_Piece_mouse_exited():
-	print("PIECE mouse exited")
-	pass # Replace with function body.

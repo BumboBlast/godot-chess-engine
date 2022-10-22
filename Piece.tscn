@@ -4,7 +4,7 @@
 [ext_resource path="res://Piece.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3.4982, 3.57817 )
+extents = Vector2( 3.45268, 3.49113 )
 
 [node name="Piece" type="Area2D"]
 scale = Vector2( 50, 50 )
@@ -17,9 +17,10 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 7, 7 )
 
 [node name="PieceCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 3.53601, 3.53601 )
+position = Vector2( 3.49728, 3.44389 )
 z_as_relative = false
 shape = SubResource( 1 )
 
+[connection signal="input_event" from="." to="." method="_on_Piece_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_Piece_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_Piece_mouse_exited"]

@@ -9,3 +9,4 @@ script = ExtResource( 2 )
 [node name="Rules" type="Node" parent="."]
 
 [node name="Board" parent="." instance=ExtResource( 1 )]
+visible = true

@@ -27,15 +27,18 @@ func increment_name(pieceName: String):
 [] make collison a precise positon/size
 
 [] event handler:
-    [] collision works
-    [] clicking works
-    [] dragging works
+    [x] collision works
+    [x] clicking works
+    [x] dragging works
+        [x] piece's center snaps to cursor
+        [x] piece's center follows cursor
+        [] can only click/drag on piece at a time
+    [] dropping pieces works
+        [x] piece will drop after you let go of the mouse button
+        [] piece will snap onto the nearest space
+        [] piece will snap back to starting space if dropped in illegal location
 
-    
 debugging:  
-
-TODO: 
-    
 
 
     
