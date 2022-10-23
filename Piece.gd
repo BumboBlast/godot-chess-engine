@@ -27,15 +27,15 @@ var selected = false
 var just_dropped = false
 
 # stores space which the piece will lerp into when dropped
-var rest_point
+var rest_point: Vector2
 
 # array of strings storing list of legal spaces that a piece in question can land
 var legal_spaces = []
 
 # stores the  coords right when a piece is clicked
-var last_legal_position
+var last_legal_position: Vector2
 
-
+var current_space: String
 
 
 
@@ -173,7 +173,8 @@ func _on_Piece_input_event(viewport, event, shape_idx):
 			
 			# calculate list of spaces legal for the piece to land
 			# !!!!!!!!!! right now does not support appending more than one value
-			legal_spaces.append(get_parent().get_parent().get_parent().get_node("Rules").get_legal_spaces(self))
+			# rules node
+			legal_spaces.append(get_parent().get_parent().get_parent().get_legal_spaces(self))
 			
 			# stores the last place the piece was picked up (only stores it once)
 			# only can pick up on piece at a time
@@ -215,7 +216,12 @@ func _input(event):
 						
 						# the array of legal spaces will be rebuilt when a new piece is clicked
 						legal_spaces.clear()
+						
+						# tell the physics loop to stop dragging the piece (drop and  then snap)
 						self.selected = false
+						
+						# legally place the piece (in the physics loop)
+						self.current_space = space
 						
 						print("correct spot")
 						return
@@ -252,9 +258,12 @@ func _physics_process(delta):
 		)
 		if (is_in_rect(global_position, ten_pixels_away)):
 			print("finished traveling")
-			global_position = rest_point
+			get_parent().get_parent().place_piece(self, current_space)
+		#	global_position = rest_point
 			update_piece_sprite_rect()
 			self.just_dropped = false
+			
+			print(current_space)
 		
 		# piece lerps until its close enough to snap
 		global_position = lerp(global_position, rest_point,  25 * delta)

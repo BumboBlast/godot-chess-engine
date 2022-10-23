@@ -28,6 +28,7 @@ func increment_name(pieceName: String):
 [] refactor is_in_rect to distance_to()
 [x] pieces are drawn to the top
     [] make z indexes more explicit
+[x] pieces now keep track of what space they are on (i can iterate pieces in the tree)
 
 [] event handler:
     [x] collision works
@@ -43,6 +44,14 @@ func increment_name(pieceName: String):
 
 [] boardState:
     [] calculate list of legal spaces each time a piece is picked up
+
+[] FEN:
+    [x]Piece Placement - 
+        [] only add pieces in the middle portion
+    [] Active Color
+    [] Castling Rights
+    [] Possible En Passant Targets
+    [] Halfmove Clock
 debugging:  
 
 

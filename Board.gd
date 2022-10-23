@@ -141,10 +141,19 @@ func instance_piece(name: String, parity: String):
 
 
 # sets the piece's (and it's sprite's) position to the square rect's 
+# only time a piece can be placed , is when calling this function
 func place_piece(piece, square: String):
+	
 	var target_square = calculate_square_rect(square)
 	piece.set_position(target_square.position)
 	piece.update_piece_sprite_rect()
+	
+	# this is a little redundant but i dont think it hurts
+	# this operation is done after "dropping" a piece over a legal square
+	piece.current_space = square
+	
+	# keep current, the record of the board state
+	get_parent().update_spaces_dictionary()
 
 
 
@@ -222,7 +231,7 @@ func loadFen(fen: String):
 
 func _ready():
 	
-	
+	print("board ready")
 	pass
 	
 	
