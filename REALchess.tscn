@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Board.tscn" type="PackedScene" id=1]
 [ext_resource path="res://REALchess.gd" type="Script" id=2]
+[ext_resource path="res://Rules.gd" type="Script" id=3]
 
 [node name="REALchess" type="Node"]
 script = ExtResource( 2 )
 
 [node name="Rules" type="Node" parent="."]
+script = ExtResource( 3 )
 
 [node name="Board" parent="." instance=ExtResource( 1 )]
 visible = true

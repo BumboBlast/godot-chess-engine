@@ -33,10 +33,10 @@ func increment_name(pieceName: String):
         [x] piece's center snaps to cursor
         [x] piece's center follows cursor
         [] can only click/drag on piece at a time
-    [] dropping pieces works
+    [x] dropping pieces works
         [x] piece will drop after you let go of the mouse button
-        [] piece will snap onto the nearest space
-        [] piece will snap back to starting space if dropped in illegal location
+        [x] piece will snap onto the nearest legal space
+        [x] piece will snap back to starting space if dropped in illegal location
 
 debugging:  
 

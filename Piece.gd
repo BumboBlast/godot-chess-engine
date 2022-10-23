@@ -20,8 +20,20 @@ var sprite_rect = Rect2(
 # default true/dark
 var parity = true
 
+# boolean stores whether or not the piece in question is draggable
 var selected = false
 
+# boolean stores when the piece has just been let go
+var just_dropped = false
+
+# stores space which the piece will lerp into when dropped
+var rest_point
+
+# array of strings storing list of legal spaces that a piece in question can land
+var legal_spaces = []
+
+# stores the  coords right when a piece is clicked
+var last_legal_position
 
 """
 	Piece methods
@@ -92,8 +104,6 @@ func update_piece_sprite_rect():
 		$PieceSprite.get_region_rect().size * self.get_scale()
 	)
 	# node and sprite should share same coords (weird)
-	print(sprite_rect.size)
-	# collision is the same shape as texture rect
 
 
 
@@ -119,22 +129,23 @@ func loadTexture():
 
 
 
+
+func is_in_rect(point: Vector2, rect: Rect2):
+
+	# if point is beyond top-left corner
+	if (point[0] > rect.position[0]):
+		if (point[1] > rect.position[1]):
+			
+			# if point is before bottom-right corner
+			if (point[0] < rect.position[0] + rect.size[0]):
+				if (point[1] < rect.position[1] + rect.size[1]):
+					return true
+	return false
+
+
 """
 Event Handlers
 """
-
-func _on_Piece_mouse_entered():
-	print("PIECE mouse entered")
-	
-
-
-
-
-
-func _on_Piece_mouse_exited():
-	print("PIECE mouse exited")
-	
-
 
 
 
@@ -144,29 +155,88 @@ func _on_Piece_input_event(viewport, event, shape_idx):
 		
 		# after click, want piece's CENTER to SNAP to mouse positon
 		global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
+		
+		# calculate list of spaces legal for the piece to land
+		legal_spaces.append(get_parent().get_parent().get_parent().get_node("Rules").get_legal_spaces(self))
+		
+		# stores the last place the piece was picked up (only stores it once)
+		if (self.selected == false):
+			
+			last_legal_position = global_position
+			print( "set last square: ", last_legal_position )
+			
+		# picks up the piece
 		self.selected = true
+
+
 
 
 
 # captures all input events
 func _input(event):
 	if (event is InputEventMouseButton):
-		if (event.button_index == BUTTON_LEFT and not event.pressed):
-			self.selected = false
-
+		
+		# if button is held
+		if (self.selected == true):
+			
+			# if button is let go
+			if (event.button_index == BUTTON_LEFT and not event.pressed):
+				
+				self.just_dropped = true
+				
+				# check to see if cursor (piece center) is hovering a legal space
+				for space in legal_spaces:
+					var space_rect = get_parent().get_parent().get_parent().get_node("Board").calculate_square_rect(space)
+					if (is_in_rect(get_global_mouse_position(), space_rect)):
+						
+						# piece will lerp into the new rest zone
+						self.rest_point = space_rect.position
+						
+						# the array of legal spaces will be rebuilt when a new piece is clicked
+						legal_spaces.clear()
+						self.selected = false
+						
+						print("correct spot")
+						return
+				
+				# piece will lerp into old rest zone (before update)
+				# since this is only updated at release of mouse button
+				self.rest_point = self.sprite_rect.position
+				self.selected = false
 
 
 
 
 func _physics_process(delta):
+	
+	# if piece is clicked (dragged)
 	if (selected == true):
 		
 		# 25 * delta fixes the movement to the frame rate
 		# the center follows the cursor
+		# lerping is finding the weighted average point 
 		global_position = lerp(global_position, get_global_mouse_position() - (self.sprite_rect.size / 2), 25 * delta)
+	
+	
+	
+	# if piece has just been let go
+	if (just_dropped == true):
 		
-
-
+		# if sprite is lerping pretty close to the square, snap it
+		var ten_pixels_away = Rect2(
+			self.rest_point[0] - 5, # 5 pixels left
+			self.rest_point[1] - 5, # 5 pixels up
+			10, # 5 pixels right
+			10 # 5 pixels down
+		)
+		if (is_in_rect(global_position, ten_pixels_away)):
+			print("finished traveling")
+			global_position = rest_point
+			update_piece_sprite_rect()
+			self.just_dropped = false
+		
+		# piece lerps until its close enough to snap
+		global_position = lerp(global_position, rest_point,  25 * delta)
 
 
 

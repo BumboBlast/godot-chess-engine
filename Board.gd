@@ -85,7 +85,7 @@ func set_board_position(percentWindowW, percentWindowH):
 
 # return pixel coordinate relative to board's origin
 # origin + coordinate_offset
-func calculate_square_coords(rankFile):
+func calculate_square_rect(rankFile):
 	# char -> int 'A' is 0. '1' is 0
 	var file = ord(rankFile[0]) - 65
 	var rank = 7 - (ord(rankFile[1]) - 49)
@@ -142,7 +142,7 @@ func instance_piece(name: String, parity: String):
 
 # sets the piece's (and it's sprite's) position to the square rect's 
 func place_piece(piece, square: String):
-	var target_square = calculate_square_coords(square)
+	var target_square = calculate_square_rect(square)
 	piece.set_position(target_square.position)
 	piece.update_piece_sprite_rect()
 
