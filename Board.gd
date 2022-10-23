@@ -191,39 +191,102 @@ func wipeBoard():
 # []Possible En Passant Targets
 # []Halfmove Clock
 # []Fullmove Number
+# r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
 func loadFen(fen: String):
 	wipeBoard()
 	
 	var rank = 1
 	var file = 8
 	
+	var considering_piece_placement = true
+	var considering_active_color = false
+	var considering_castling_rights = false
+	var considering_possible_en_passant_targets = false
+	var considering_halfmove_clock = false
+	var considering_fullmove_number = false
+	
 	for ch in fen:
-		var space = String(char(rank + 64)) + String(char(file + 48))
 		
-		# if character is a letter
-		if (ch == 'p'): add_piece("Pawn", "Dark", space)
-		if (ch == 'P'): add_piece("Pawn", "Light", space)
-		if (ch == 'n'): add_piece("Knight", "Dark", space)
-		if (ch == 'N'): add_piece("Knight", "Light", space)
-		if (ch == 'b'): add_piece("Bishop", "Dark", space)
-		if (ch == 'B'): add_piece("Bishop", "Light", space)
-		if (ch == 'r'): add_piece("Rook", "Dark", space)
-		if (ch == 'R'): add_piece("Rook", "Light", space)
-		if (ch == 'k'): add_piece("King", "Dark", space)
-		if (ch == 'K'): add_piece("King", "Light", space)
-		if (ch == 'q'): add_piece("Queen", "Dark", space)
-		if (ch == 'Q'): add_piece("Queen", "Light", space)
-		
-		# how many spaces between next Piece
-		if (ch.is_valid_integer()):
-			rank = rank + int(ch)
-			continue
-		
-		# increment file
-		if (ch == '/'):
-			file = file - 1
-			rank = 0
-		rank = rank + 1
+		if (considering_piece_placement):
+			var space = String(char(rank + 64)) + String(char(file + 48))
+			
+			# if character is a letter
+			if (ch == 'p'): add_piece("Pawn", "Dark", space)
+			if (ch == 'P'): add_piece("Pawn", "Light", space)
+			if (ch == 'n'): add_piece("Knight", "Dark", space)
+			if (ch == 'N'): add_piece("Knight", "Light", space)
+			if (ch == 'b'): add_piece("Bishop", "Dark", space)
+			if (ch == 'B'): add_piece("Bishop", "Light", space)
+			if (ch == 'r'): add_piece("Rook", "Dark", space)
+			if (ch == 'R'): add_piece("Rook", "Light", space)
+			if (ch == 'k'): add_piece("King", "Dark", space)
+			if (ch == 'K'): add_piece("King", "Light", space)
+			if (ch == 'q'): add_piece("Queen", "Dark", space)
+			if (ch == 'Q'): add_piece("Queen", "Light", space)
+			
+			# how many spaces between next Piece
+			if (ch.is_valid_integer()):
+				rank = rank + int(ch)
+				continue
+			
+			# increment file
+			if (ch == '/'):
+				file = file - 1
+				rank = 0
+			rank = rank + 1
+			
+			# next pass, do active color
+			if (ch == ' '):
+				considering_active_color = true
+				considering_piece_placement = false
+				continue
+			
+		if (considering_active_color):
+			
+			if (ch == 'b'):
+				get_parent().set_active_color("dark")
+			elif (ch == 'w'):
+				get_parent().set_active_color("light")
+			
+			# next pass, do  castling rights
+			if (ch == ' '):
+				considering_castling_rights = true
+				considering_active_color = false
+				continue
+			
+		if (considering_castling_rights):
+			
+			if (ch == 'k'): get_parent().castling_rights_black_kingside = true
+			if (ch == 'K'): get_parent().castling_rights_white_kingside = true
+			if (ch == 'q'): get_parent().castling_rights_black_queenside = true
+			if (ch == 'Q'): get_parent().castling_rights_white_queenside = true
+			
+			# next pass, do en passnt targets
+			if (ch == ' '):
+				considering_possible_en_passant_targets = true
+				considering_castling_rights = false
+				continue
+			
+		if (considering_possible_en_passant_targets):
+			get_parent().enpassant_target += ch
+			
+			# next pass, do Halfmove Clock
+			# '-' means no enpassant targets
+			if (ch == ' '):
+				considering_halfmove_clock = true
+				considering_possible_en_passant_targets = false
+				continue
+			
+		if (considering_halfmove_clock):
+			
+			get_parent().halfmove_clock += ch
+			if (ch == ' '):
+				considering_fullmove_number = true
+				considering_halfmove_clock = false
+				continue
+			
+		if (considering_fullmove_number):
+			get_parent().fullmove_clock += ch
 
 
 

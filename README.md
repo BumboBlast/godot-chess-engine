@@ -44,14 +44,15 @@ func increment_name(pieceName: String):
 
 [] boardState:
     [] calculate list of legal spaces each time a piece is picked up
+        [] make get_legal_spaces() be able to return an array of strings
 
-[] FEN:
+[x] FEN:
     [x]Piece Placement - 
-        [] only add pieces in the middle portion
-    [] Active Color
-    [] Castling Rights
-    [] Possible En Passant Targets
-    [] Halfmove Clock
+        [x] only add pieces in the middle portion
+    [x] Active Color
+    [x] Castling Rights
+    [x] Possible En Passant Targets
+    [x] Halfmove Clock
 debugging:  
 
 
