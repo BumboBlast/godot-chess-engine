@@ -35,6 +35,11 @@ var legal_spaces = []
 # stores the  coords right when a piece is clicked
 var last_legal_position
 
+
+
+
+
+
 """
 	Piece methods
 """
@@ -143,30 +148,43 @@ func is_in_rect(point: Vector2, rect: Rect2):
 	return false
 
 
-"""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Event Handlers
-"""
-
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # only captures input events with concern to the collision node
 func _on_Piece_input_event(viewport, event, shape_idx):
+	
+	#if clicked
 	if (Input.is_action_pressed("ui_left_mouse")):
 		
-		# after click, want piece's CENTER to SNAP to mouse positon
-		global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
-		
-		# calculate list of spaces legal for the piece to land
-		legal_spaces.append(get_parent().get_parent().get_parent().get_node("Rules").get_legal_spaces(self))
-		
-		# stores the last place the piece was picked up (only stores it once)
-		if (self.selected == false):
+		#if no piece in hand
+		if (get_parent().piece_in_hand == false):
 			
-			last_legal_position = global_position
-			print( "set last square: ", last_legal_position )
+			# can only hold one piece at once
+			get_parent().set_piece_in_hand(self, true)
 			
-		# picks up the piece
-		self.selected = true
+			#pop texture to higest layer (called in AllPieces)
+			
+			# after click, want piece's CENTER to SNAP to mouse positon
+			global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
+			
+			# calculate list of spaces legal for the piece to land
+			# !!!!!!!!!! right now does not support appending more than one value
+			legal_spaces.append(get_parent().get_parent().get_parent().get_node("Rules").get_legal_spaces(self))
+			
+			# stores the last place the piece was picked up (only stores it once)
+			# only can pick up on piece at a time
+			if (self.selected == false):
+				
+				last_legal_position = global_position
+				print( "set last square: ", last_legal_position )
+				
+				# picks up the piece
+				self.selected = true
+
 
 
 
@@ -183,6 +201,9 @@ func _input(event):
 			if (event.button_index == BUTTON_LEFT and not event.pressed):
 				
 				self.just_dropped = true
+				
+				# can hold a new piece
+				get_parent().set_piece_in_hand(self, false)
 				
 				# check to see if cursor (piece center) is hovering a legal space
 				for space in legal_spaces:
@@ -207,6 +228,7 @@ func _input(event):
 
 
 
+
 func _physics_process(delta):
 	
 	# if piece is clicked (dragged)
@@ -216,7 +238,6 @@ func _physics_process(delta):
 		# the center follows the cursor
 		# lerping is finding the weighted average point 
 		global_position = lerp(global_position, get_global_mouse_position() - (self.sprite_rect.size / 2), 25 * delta)
-	
 	
 	
 	# if piece has just been let go
@@ -237,6 +258,8 @@ func _physics_process(delta):
 		
 		# piece lerps until its close enough to snap
 		global_position = lerp(global_position, rest_point,  25 * delta)
+
+
 
 
 

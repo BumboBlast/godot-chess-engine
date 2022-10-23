@@ -22,5 +22,3 @@ z_as_relative = false
 shape = SubResource( 1 )
 
 [connection signal="input_event" from="." to="." method="_on_Piece_input_event"]
-[connection signal="mouse_entered" from="." to="." method="_on_Piece_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_Piece_mouse_exited"]

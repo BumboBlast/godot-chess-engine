@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
+[ext_resource path="res://AllPieces.gd" type="Script" id=1]
 [ext_resource path="res://Piece.tscn" type="PackedScene" id=2]
 [ext_resource path="res://art/boardPinkMaroonNOBORDERS.png" type="Texture" id=3]
 [ext_resource path="res://Board.gd" type="Script" id=5]
@@ -15,3 +16,4 @@ script = ExtResource( 5 )
 visible = false
 
 [node name="AllPieces" type="Node" parent="."]
+script = ExtResource( 1 )

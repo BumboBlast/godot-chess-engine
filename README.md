@@ -25,6 +25,9 @@ func increment_name(pieceName: String):
 [x] instance pieces (all pieces)
 [x] place piece function (all pieces)
 [] make collison a precise positon/size
+[] refactor is_in_rect to distance_to()
+[x] pieces are drawn to the top
+    [] make z indexes more explicit
 
 [] event handler:
     [x] collision works
@@ -32,12 +35,14 @@ func increment_name(pieceName: String):
     [x] dragging works
         [x] piece's center snaps to cursor
         [x] piece's center follows cursor
-        [] can only click/drag on piece at a time
+        [x] can only click/drag on piece at a time
     [x] dropping pieces works
         [x] piece will drop after you let go of the mouse button
         [x] piece will snap onto the nearest legal space
         [x] piece will snap back to starting space if dropped in illegal location
 
+[] boardState:
+    [] calculate list of legal spaces each time a piece is picked up
 debugging:  
 
 
