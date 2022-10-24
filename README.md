@@ -46,14 +46,55 @@ func increment_name(pieceName: String):
     [] calculate list of legal spaces each time a piece is picked up
         [] make get_legal_spaces() be able to return an array of strings
 
-[x] FEN:
+[] FEN:
     [x]Piece Placement - 
         [x] only add pieces in the middle portion
     [x] Active Color
     [x] Castling Rights
     [x] Possible En Passant Targets
     [x] Halfmove Clock
+    [] REFACTOR so it isnt a huge stinky pile
+
+[] rules:
+    [x] legal spaces returns list, and its interpreted correctly
+    [] calulcate legal moves based on piece held by consulting list of rules
+    [] refine legal moves list based upon other pieces on the board
+    [] refine legal moves list based upon other things (en passant, castling, stalemtn, check)
+        [] pawn rules
+            [x] move one space
+            [] move pawn 2 spaces if on second/ seventh rank
+            [] enpassant
+            [] promoting
+            [] capturing
+        [] knight rules
+            [x] normal move
+            [] capturing
+        [] bishop rules
+            [x] normal move
+            [] capturing
+        [] rook rules
+            [x] normal move
+            [] capturing
+        [] king rules
+            [] normal move
+            [] capturing
+        [] queen rules
+            [] capturing
+
+        
 debugging:  
 
+    BUG in Piece and Board:
+
+    Piece: when changing how legal_spaces is updated
+        legal_spaces = get_legal_spaces  instad of legal_spaces.append(get_legal_spaces)
+    then game crashes with error from
+    Board's calculate boardsquare
+    ( i think i fixed it by making sure get_legal_spaces returns an array)
+
+    BUG:
+        pieces can move off board. (there are legal spaces outside the board B9, etc)
+
+    Bug: knight moves off board when at Square A1. SOLVED: ranges are [,)
 
     

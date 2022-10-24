@@ -174,14 +174,13 @@ func _on_Piece_input_event(viewport, event, shape_idx):
 			# calculate list of spaces legal for the piece to land
 			# !!!!!!!!!! right now does not support appending more than one value
 			# rules node
-			legal_spaces.append(get_parent().get_parent().get_parent().get_legal_spaces(self))
+			legal_spaces = get_parent().get_parent().get_parent().get_legal_spaces(self)
 			
 			# stores the last place the piece was picked up (only stores it once)
 			# only can pick up on piece at a time
 			if (self.selected == false):
 				
 				last_legal_position = global_position
-				print( "set last square: ", last_legal_position )
 				
 				# picks up the piece
 				self.selected = true
@@ -223,7 +222,6 @@ func _input(event):
 						# legally place the piece (in the physics loop)
 						self.current_space = space
 						
-						print("correct spot")
 						return
 				
 				# piece will lerp into old rest zone (before update)
@@ -257,13 +255,11 @@ func _physics_process(delta):
 			10 # 5 pixels down
 		)
 		if (is_in_rect(global_position, ten_pixels_away)):
-			print("finished traveling")
 			get_parent().get_parent().place_piece(self, current_space)
 		#	global_position = rest_point
 			update_piece_sprite_rect()
 			self.just_dropped = false
 			
-			print(current_space)
 		
 		# piece lerps until its close enough to snap
 		global_position = lerp(global_position, rest_point,  25 * delta)
