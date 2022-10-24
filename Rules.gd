@@ -166,6 +166,30 @@ func rook_mobility(piece, current_space):
 	return rook_mobility_set
 
 
+func queen_mobility(piece, current_space):
+	var queen_mobility_set = []
+	# a queen can move anywhere a bishop or a rook could
+	queen_mobility_set += bishop_mobility(piece, current_space)
+	queen_mobility_set += rook_mobility(piece, current_space)
+	return queen_mobility_set
+
+
+
+func king_mobility(piece, current_space):
+	var king_mobility_set = []
+	
+	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + (char(ord(current_space[1]) + 1)))
+	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + (char(ord(current_space[1]) - 1)))
+	king_mobility_set.push_back((char(ord(current_space[0]) - 1)) + (char(ord(current_space[1]) + 1)))
+	king_mobility_set.push_back((char(ord(current_space[0]) - 1)) + (char(ord(current_space[1]) - 1)))
+	king_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) + 1)))
+	king_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) - 1)))
+	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + current_space[1])
+	king_mobility_set.push_back((char(ord(current_space[0]) - 1)) + current_space[1])
+	
+	return king_mobility_set
+
+
 
 
 # returns the set of moves that a piece could make if the board were empty
@@ -183,12 +207,15 @@ func consult_piece_mobility(piece, current_space):
 		
 		if (piece.name.begins_with("Bishop")):
 			piece_mobility_set = bishop_mobility(piece, current_space)
-			
 		
 		if (piece.name.begins_with("Rook")):
 			piece_mobility_set = rook_mobility(piece, current_space)
-			
-	
+		
+		if (piece.name.begins_with("Queen")):
+			piece_mobility_set = queen_mobility(piece, current_space)
+		
+		if (piece.name.begins_with("King")):
+			piece_mobility_set = king_mobility(piece, current_space)
 	
 	
 	
