@@ -20,66 +20,67 @@ func increment_name(pieceName: String):
 
 --------------------------------------------------------------------------------
 
-[x] piece load texture (piece)
-[] make the pieces take up the whole square, AND center onto the square
-[x] instance pieces (all pieces)
-[x] place piece function (all pieces)
-[] make collison a precise positon/size
-[] refactor is_in_rect to distance_to()
-[x] pieces are drawn to the top
-    [] make z indexes more explicit
-[x] pieces now keep track of what space they are on (i can iterate pieces in the tree)
+    [x] piece load texture (piece)
+    [] make the pieces take up the whole square, AND center onto the square
+    [x] instance pieces (all pieces)
+    [x] place piece function (all pieces)
+    [] make collison a precise positon/size
+    [] refactor is_in_rect to distance_to()
+    [x] pieces are drawn to the top
+        [] make z indexes more explicit
+    [x] pieces now keep track of what space they are on (i can iterate pieces in the tree)
 
-[] event handler:
-    [x] collision works
-    [x] clicking works
-    [x] dragging works
-        [x] piece's center snaps to cursor
-        [x] piece's center follows cursor
-        [x] can only click/drag on piece at a time
-    [x] dropping pieces works
-        [x] piece will drop after you let go of the mouse button
-        [x] piece will snap onto the nearest legal space
-        [x] piece will snap back to starting space if dropped in illegal location
+    [] event handler:
+        [x] collision works
+        [x] clicking works
+        [x] dragging works
+            [x] piece's center snaps to cursor
+            [x] piece's center follows cursor
+            [x] can only click/drag on piece at a time
+        [x] dropping pieces works
+            [x] piece will drop after you let go of the mouse button
+            [x] piece will snap onto the nearest legal space
+            [x] piece will snap back to starting space if dropped in illegal location
 
-[] boardState:
-    [] calculate list of legal spaces each time a piece is picked up
-        [] make get_legal_spaces() be able to return an array of strings
+    [] boardState:
+        [] calculate list of legal spaces each time a piece is picked up
+            [] make get_legal_spaces() be able to return an array of strings
 
-[] FEN:
-    [x]Piece Placement - 
-        [x] only add pieces in the middle portion
-    [x] Active Color
-    [x] Castling Rights
-    [x] Possible En Passant Targets
-    [x] Halfmove Clock
-    [] REFACTOR so it isnt a huge stinky pile
+    [] FEN:
+        [x]Piece Placement - 
+            [x] only add pieces in the middle portion
+        [x] Active Color
+        [x] Castling Rights
+        [x] Possible En Passant Targets
+        [x] Halfmove Clock
+        [] REFACTOR so it isnt a huge stinky pile
 
-[] rules:
-    [x] legal spaces returns list, and its interpreted correctly
-    [] calulcate legal moves based on piece held by consulting list of rules
-    [] refine legal moves list based upon other pieces on the board
-    [] refine legal moves list based upon other things (en passant, castling, stalemtn, check)
-        [] pawn rules
-            [x] move one space
-            [] move pawn 2 spaces if on second/ seventh rank
-            [] enpassant
-            [] promoting
-            [] capturing
-        [] knight rules
-            [x] normal move
-            [] capturing
-        [] bishop rules
-            [x] normal move
-            [] capturing
-        [] rook rules
-            [x] normal move
-            [] capturing
-        [] king rules
-            [] normal move
-            [] capturing
-        [] queen rules
-            [] capturing
+    [] rules:
+        [x] legal spaces returns list, and its interpreted correctly
+        [] calulcate legal moves based on piece held by consulting list of rules
+        [] refine legal moves list based upon other pieces on the board
+        [] refine legal moves list based upon other things (en passant, castling, stalemtn, check)
+            [] pawn rules
+                [x] move one space
+                [] move pawn 2 spaces if on second/ seventh rank
+                [] enpassant
+                [] promoting
+                [] capturing
+            [] knight rules
+                [x] normal move
+                [] capturing
+            [] bishop rules
+                [x] normal move
+                [] capturing
+            [] rook rules
+                [x] normal move
+                [] capturing
+            [] king rules
+                [x] normal move
+                [] capturing
+            [] queen rules
+                [x] normal move
+                [] capturing
 
         
 debugging:  
