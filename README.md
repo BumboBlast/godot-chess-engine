@@ -57,12 +57,12 @@ func increment_name(pieceName: String):
 
     [] rules:
         [x] legal spaces returns list, and its interpreted correctly
-        [] calulcate legal moves based on piece held by consulting list of rules
-        [] refine legal moves list based upon other pieces on the board
+        [x] calulcate legal moves based on piece held by consulting list of rules
+        [x] refine legal moves list based upon other pieces on the board
         [] refine legal moves list based upon other things (en passant, castling, stalemtn, check)
             [] pawn rules
                 [x] move one space
-                [] move pawn 2 spaces if on second/ seventh rank
+                [x] move pawn 2 spaces if on second/ seventh rank
                 [] enpassant
                 [] promoting
                 [] capturing
