@@ -47,33 +47,30 @@ var halfmove_clock: String
 var fullmove_clock: String
 
 # map of square names to pieces occupying them
-var spaces = {}
+# updated every single piece_placement
+var occupied_spaces = {}
 
-# create dictionary of spaces
-# used in this class, and updated frequently, 
-# rather than calling node tree hundreds of times
-func make_spaces_dictionary_keys():
-	for file in 8:
-		for rank in 8:
-			spaces[String(char(file + 65)) + String(char(rank + 49))] = false
 
 
 
 
 
 
+# create dictionary of spaces
+# used in this class, and updated frequently, 
+# rather than calling node tree hundreds of times
 # can be called everytime board state changes
 func update_spaces_dictionary():
 	
 	# wipe dictionary
-	spaces.clear()
+	occupied_spaces.clear()
 	
 	# rebuild dictionary with updated Space-piece pairings
-	make_spaces_dictionary_keys()
+	#make_spaces_dictionary_keys()
 	for piece in $Board/AllPieces.get_children():
 		
 		if (piece.current_space):
-			spaces[piece.current_space] = piece
+			occupied_spaces[piece.current_space] = piece
 
 
 
@@ -92,8 +89,23 @@ func get_fen():
 # returns set of legal spaces the Pawn in question can move
 func pawn_mobility(piece, current_space):
 	var pawn_mobility_set = []
-	# decrement rank
-	pawn_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) - 1)))
+	
+	# decrement rank if black
+	if (piece.parity):
+		pawn_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) - 1)))
+		
+		# black pawns can move twice instead of once, if on the seventh rank
+		if (current_space.ends_with('7')):
+			pawn_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) - 2)))
+			
+	# increment rank if white
+	if (piece.parity == false):
+		pawn_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) + 1)))
+		
+		# white pawns can move twice instead of once, if on the second rank
+		if (current_space.ends_with('2')):
+			pawn_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) + 2)))
+	
 	return pawn_mobility_set
 
 
@@ -177,7 +189,6 @@ func queen_mobility(piece, current_space):
 
 func king_mobility(piece, current_space):
 	var king_mobility_set = []
-	
 	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + (char(ord(current_space[1]) + 1)))
 	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + (char(ord(current_space[1]) - 1)))
 	king_mobility_set.push_back((char(ord(current_space[0]) - 1)) + (char(ord(current_space[1]) + 1)))
@@ -186,7 +197,6 @@ func king_mobility(piece, current_space):
 	king_mobility_set.push_back(current_space[0] + (char(ord(current_space[1]) - 1)))
 	king_mobility_set.push_back((char(ord(current_space[0]) + 1)) + current_space[1])
 	king_mobility_set.push_back((char(ord(current_space[0]) - 1)) + current_space[1])
-	
 	return king_mobility_set
 
 
@@ -196,26 +206,23 @@ func king_mobility(piece, current_space):
 func consult_piece_mobility(piece, current_space):
 	var piece_mobility_set = []
 	
-	# if piece is black
-	if (piece.parity): 
-		
-		if (piece.name.begins_with("Pawn")):
-			piece_mobility_set = pawn_mobility(piece, current_space)
-		
-		if (piece.name.begins_with("Knight")): 
-			piece_mobility_set = knight_mobility(piece, current_space)
-		
-		if (piece.name.begins_with("Bishop")):
-			piece_mobility_set = bishop_mobility(piece, current_space)
-		
-		if (piece.name.begins_with("Rook")):
-			piece_mobility_set = rook_mobility(piece, current_space)
-		
-		if (piece.name.begins_with("Queen")):
-			piece_mobility_set = queen_mobility(piece, current_space)
-		
-		if (piece.name.begins_with("King")):
-			piece_mobility_set = king_mobility(piece, current_space)
+	if (piece.name.begins_with("Pawn")):
+		piece_mobility_set = pawn_mobility(piece, current_space)
+	
+	if (piece.name.begins_with("Knight")): 
+		piece_mobility_set = knight_mobility(piece, current_space)
+	
+	if (piece.name.begins_with("Bishop")):
+		piece_mobility_set = bishop_mobility(piece, current_space)
+	
+	if (piece.name.begins_with("Rook")):
+		piece_mobility_set = rook_mobility(piece, current_space)
+	
+	if (piece.name.begins_with("Queen")):
+		piece_mobility_set = queen_mobility(piece, current_space)
+	
+	if (piece.name.begins_with("King")):
+		piece_mobility_set = king_mobility(piece, current_space)
 	
 	
 	
@@ -251,6 +258,9 @@ func get_legal_spaces(piece):
 	
 	# list of spaces a piece could move if the board were empty
 	var piece_mobility = consult_piece_mobility(piece, p_current_space)
+	
+	# list of spaces occupied by pieces already
+	
 	return piece_mobility
 
 
