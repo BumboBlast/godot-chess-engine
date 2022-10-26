@@ -52,10 +52,6 @@ var occupied_spaces = {}
 
 
 
-
-
-
-
 # create dictionary of spaces
 # used in this class, and updated frequently, 
 # rather than calling node tree hundreds of times
@@ -150,10 +146,9 @@ func bishop_mobility(piece, current_space):
 			if (orientation == 1 or orientation == 2): file_offset = - 1
 			if (orientation == 0 or orientation == 1): rank_offset = -1
 			
-			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) + (char(ord(current_space[1]) + (n * rank_offset))))
-			var stop_looking = false
-			if (is_occupied(next_space)): stop_looking = true
-			if (stop_looking): break
+			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) \
+			+ (char(ord(current_space[1]) + (n * rank_offset))))
+			if (is_occupied(next_space)): break
 			bishop_mobility_set.push_back(next_space)
 	
 	return bishop_mobility_set
@@ -181,10 +176,9 @@ func rook_mobility(piece, current_space):
 				rank_offset = 0
 			
 			
-			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) + (char(ord(current_space[1]) + (n * rank_offset))))
-			var stop_looking = false
-			if (is_occupied(next_space)): stop_looking = true
-			if (stop_looking): break
+			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) \
+			 + (char(ord(current_space[1]) + (n * rank_offset))))
+			if (is_occupied(next_space)): break
 			rook_mobility_set.push_back(next_space)
 	
 	return rook_mobility_set
@@ -210,6 +204,14 @@ func king_mobility(piece, current_space):
 		file_offset[filerank])) + (char(ord(current_space[1]) + rank_offset[filerank]))
 		if (!is_occupied(considered_space)):
 			king_mobility_set.push_back(considered_space)
+	
+	#if black
+	if (piece.parity):
+		if (castling_rights_black_kingside): print( "castle kingside")
+		if (castling_rights_black_queenside): print( "castle queenside")
+	else:
+		if (castling_rights_white_queenside): print( "castle kingside")
+		if (castling_rights_white_queenside): print( "castle queenside")
 	return king_mobility_set
 
 
@@ -259,11 +261,6 @@ func get_legal_spaces(piece):
 	
 	var p_current_space = piece.current_space
 	
-	# step one, consider the legal spots a piece could land
-	# step two, consider which spots are unoccupied
-	#	make sure bishops, rooks, queen are stopped by first occupied square
-	# set of legal moves are the interesection of steps 1,2,3
-	
 	# list of spaces a piece could move if the board were empty
 	var piece_mobility = consult_piece_mobility(piece, p_current_space)
 	
@@ -274,7 +271,11 @@ func get_legal_spaces(piece):
 	return piece_mobility
 
 
-
+func update_board_state():
+	# keep roster of spaces : pieces current
+	update_spaces_dictionary()
+	
+	#print(most_recent_move)
 
 
 # Called when the node enters the scene tree for the first time.
