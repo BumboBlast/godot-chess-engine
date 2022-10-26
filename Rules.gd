@@ -274,7 +274,6 @@ func get_legal_spaces(piece):
 func update_board_state():
 	# keep roster of spaces : pieces current
 	update_spaces_dictionary()
-	
 	#print(most_recent_move)
 
 

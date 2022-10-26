@@ -32,11 +32,11 @@ var rest_point: Vector2
 # array of strings storing list of legal spaces that a piece in question can land
 var legal_spaces = []
 
-# stores the  coords right when a piece is clicked
-var last_legal_position: Vector2
+
+
 
 var current_space: String
-
+var previous_space: String
 
 
 
@@ -172,15 +172,12 @@ func _on_Piece_input_event(viewport, event, shape_idx):
 			global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
 			
 			# calculate list of spaces legal for the piece to land
-			# !!!!!!!!!! right now does not support appending more than one value
 			# rules node
 			legal_spaces = get_parent().get_parent().get_parent().get_legal_spaces(self)
 			
 			# stores the last place the piece was picked up (only stores it once)
-			# only can pick up on piece at a time
+			# only can pick up one piece at a time
 			if (self.selected == false):
-				
-				last_legal_position = global_position
 				
 				# picks up the piece
 				self.selected = true
@@ -220,6 +217,7 @@ func _input(event):
 						self.selected = false
 						
 						# legally place the piece (in the physics loop)
+						self.previous_space = current_space
 						self.current_space = space
 						
 						return
