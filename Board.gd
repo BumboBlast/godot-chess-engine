@@ -154,7 +154,7 @@ func place_piece(piece, new_space: String):
 	piece.current_space = new_space
 	
 	# keep current, the record of the board state
-	get_parent().update_board_state()
+	get_parent().update_spaces_dictionary()
 
 
 

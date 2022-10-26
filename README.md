@@ -31,7 +31,12 @@ func increment_name(pieceName: String):
     [x] pieces now keep track of what space they are on (i can iterate pieces in the tree)
     [x] piees now keep track of what space they were on before being legally moved
     [] added a score card (keeps track of move order)
-
+    [] make rook movement (during castling) lerp
+    [] make sure castling checks for all inbetween spaces as legality
+    ---- 
+    right now place_piece (mostly) physically moves the sprite, and is located in baord (called in piece)
+    logical_move legally moves the piece , and is located in rules (called in piece)
+    ----
 
     [] event handler:
         [x] collision works

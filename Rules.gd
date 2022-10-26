@@ -56,9 +56,7 @@ score[1] = black piece.name, old square, new square
 """ 
 var score = []
 
-func udpate_score(piecename: String, old_space: String, new_space: String):
-	score.push_back([piecename, old_space, new_space])
-	print(score)
+
 
 # create dictionary of spaces
 # used in this class, and updated frequently, 
@@ -84,6 +82,25 @@ func update_spaces_dictionary():
 # generate and return a FEN for the current board state
 func get_fen():
 	pass
+
+
+# returns king's castling target squares to be appended to legal spaces
+# casling rights boolean will be updated after each move in board_state func
+func try_castling(piece, current_space):
+	
+	var castling_targets = []
+	
+	# check for occupied spaces, between the new target squares here # 
+	
+	if (piece.parity):
+		if (castling_rights_black_kingside): castling_targets.push_back("G8")
+		if (castling_rights_black_queenside): castling_targets.push_back("C8")
+	else:
+		if (castling_rights_white_kingside): castling_targets.push_back("G1")
+		if (castling_rights_white_queenside): castling_targets.push_back("C1")
+	
+	return castling_targets
+
 
 # returns the piece if occupied, else returns false if empty
 func is_occupied(space):
@@ -213,13 +230,7 @@ func king_mobility(piece, current_space):
 		if (!is_occupied(considered_space)):
 			king_mobility_set.push_back(considered_space)
 	
-	#if black
-	if (piece.parity):
-		if (castling_rights_black_kingside): print( "castle kingside")
-		if (castling_rights_black_queenside): print( "castle queenside")
-	else:
-		if (castling_rights_white_queenside): print( "castle kingside")
-		if (castling_rights_white_queenside): print( "castle queenside")
+	king_mobility_set += try_castling(piece, current_space)
 	return king_mobility_set
 
 
@@ -258,11 +269,52 @@ func consult_piece_mobility(piece, current_space):
 	pass
 
 
+
+func just_castled(piecename: String, old_space: String, new_space: String):
+	
+	if ("King" in piecename): 
+		var king_moved_spaces = ord(new_space[0]) - ord(old_space[0])
+		if (abs(king_moved_spaces) == 2):
+			
+			# return concerned rook and new rook space as [x, y]
+			var old_rook_space
+			var new_rook_space
+			
+			if (new_space == "G1"):
+				old_rook_space = "H1"
+				new_rook_space = "F1"
+				castling_rights_white_kingside = false
+				castling_rights_white_queenside = false
+			if (new_space == "C1"):
+				old_rook_space = "A1"
+				new_rook_space = "D1"
+				castling_rights_white_kingside = false
+				castling_rights_white_queenside = false
+			if (new_space == "G8"):
+				old_rook_space = "H8"
+				new_rook_space = "F8"
+				castling_rights_black_kingside = false
+				castling_rights_black_queenside = false
+			if (new_space == "C8"):
+				old_rook_space = "A8"
+				new_rook_space = "D8"
+				castling_rights_black_kingside = false
+				castling_rights_black_queenside = false
+			return [old_rook_space, new_rook_space]
+
+	return false
+
+
+# updates the board state and score with each real, legal move
 func make_logical_move(piece, old_space: String, new_space: String):
 	var parity = "White"
 	if (piece.parity): parity = "Black"
 	score.push_back([parity + piece.name, old_space, new_space])
-	print(score)
+	
+	# if castled, move the rook and then disable castling for that color
+	var just_castled = just_castled(piece.name, old_space, new_space)
+	if (just_castled):
+		$Board.place_piece(occupied_spaces[just_castled[0]], just_castled[1])
 
 
 
@@ -282,10 +334,6 @@ func get_legal_spaces(piece):
 	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
-
-func update_board_state():
-	# keep roster of spaces : pieces current
-	update_spaces_dictionary()
 
 
 # Called when the node enters the scene tree for the first time.
