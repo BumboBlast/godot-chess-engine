@@ -96,14 +96,12 @@ func is_occupied(space):
 # returns set of legal spaces the Pawn in question can move
 func pawn_mobility(piece, current_space):
 	var pawn_mobility_set = []
-	var direction
-	var second_seventh_rank
+	var direction = 1
+	var second_seventh_rank = 2
+	
 	if (piece.parity): 
 		direction = -1
 		second_seventh_rank = '7'
-	else:
-		direction = 1
-		second_seventh_rank = '2'
 	
 	var space_ahead = current_space[0] + (char(ord(current_space[1]) + (1 * direction)))
 	var two_spaces_ahead = space_ahead[0] + (char(ord(space_ahead[1]) + (1 * direction)))
@@ -229,7 +227,7 @@ func trim_moves(moves: Array, piece, current_space: String):
 	return moves
 	pass
 
-# returns the set of moves that a piece could make if the board were empty
+# returns the set of moves that a piece could make
 func consult_piece_mobility(piece, current_space):
 	var piece_mobility_set = []
 	
