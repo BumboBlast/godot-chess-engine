@@ -255,10 +255,10 @@ func loadFen(fen: String):
 			
 		if (considering_castling_rights):
 			
-			if (ch == 'k'): get_parent().castling_rights_black_kingside = true
-			if (ch == 'K'): get_parent().castling_rights_white_kingside = true
-			if (ch == 'q'): get_parent().castling_rights_black_queenside = true
-			if (ch == 'Q'): get_parent().castling_rights_white_queenside = true
+			if (ch == 'k'): get_parent().castling_rights[0] = 1
+			if (ch == 'K'): get_parent().castling_rights[2] = 1
+			if (ch == 'q'): get_parent().castling_rights[1] = 1
+			if (ch == 'Q'): get_parent().castling_rights[3] = 1
 			
 			# next pass, do en passnt targets
 			if (ch == ' '):

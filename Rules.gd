@@ -27,10 +27,13 @@ func set_active_color(color: String):
 
 
 # default is no, load FEN makes it yes
-var castling_rights_white_kingside = false
-var castling_rights_black_kingside = false
-var castling_rights_white_queenside = false
-var castling_rights_black_queenside = false
+var castling_rights = [
+	false, #H8
+	false, #A8
+	false, #H1
+	false #A1
+]
+
 
 # enpassant target
 # can be a space or '-'
@@ -88,18 +91,20 @@ func get_fen():
 # casling rights boolean will be updated after each move in board_state func
 func try_castling(piece, current_space):
 	
-	var castling_targets = []
-	
+	var castling_targets = ["G8", "C8", "G1", "C1"]
+	var valid_targets = []
 	# check for occupied spaces, between the new target squares here # 
 	
-	if (piece.parity):
-		if (castling_rights_black_kingside): castling_targets.push_back("G8")
-		if (castling_rights_black_queenside): castling_targets.push_back("C8")
-	else:
-		if (castling_rights_white_kingside): castling_targets.push_back("G1")
-		if (castling_rights_white_queenside): castling_targets.push_back("C1")
+	var rook_spaces = ["H8", "A8", "H1", "A1"]
 	
-	return castling_targets
+	for index in range(0, rook_spaces.size()):
+		var corner = is_occupied(rook_spaces[index])
+		if (corner):
+			if (castling_rights[index]):
+				if ("Rook" in corner.name):
+					valid_targets.push_back(castling_targets[index])
+
+	return valid_targets
 
 
 # returns the piece if occupied, else returns false if empty
@@ -280,26 +285,28 @@ func just_castled(piecename: String, old_space: String, new_space: String):
 			var old_rook_space
 			var new_rook_space
 			
-			if (new_space == "G1"):
-				old_rook_space = "H1"
-				new_rook_space = "F1"
-				castling_rights_white_kingside = false
-				castling_rights_white_queenside = false
-			if (new_space == "C1"):
-				old_rook_space = "A1"
-				new_rook_space = "D1"
-				castling_rights_white_kingside = false
-				castling_rights_white_queenside = false
 			if (new_space == "G8"):
 				old_rook_space = "H8"
 				new_rook_space = "F8"
-				castling_rights_black_kingside = false
-				castling_rights_black_queenside = false
+				castling_rights[0] = false
+				castling_rights[1] = false
 			if (new_space == "C8"):
 				old_rook_space = "A8"
 				new_rook_space = "D8"
-				castling_rights_black_kingside = false
-				castling_rights_black_queenside = false
+				castling_rights[0] = false
+				castling_rights[1] = false
+			if (new_space == "G1"):
+				old_rook_space = "H1"
+				new_rook_space = "F1"
+				castling_rights[2] = false
+				castling_rights[3] = false
+			if (new_space == "C1"):
+				old_rook_space = "A1"
+				new_rook_space = "D1"
+				castling_rights[2] = false
+				castling_rights[3] = false
+
+
 			return [old_rook_space, new_rook_space]
 
 	return false
@@ -331,6 +338,7 @@ func get_legal_spaces(piece):
 	# trim moves that are off board (very important!!)
 	piece_mobility = trim_moves(piece_mobility, piece, p_current_space)
 
+	print (castling_rights)
 	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
