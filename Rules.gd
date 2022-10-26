@@ -50,7 +50,15 @@ var fullmove_clock: String
 # updated every single piece_placement
 var occupied_spaces = {}
 
+"""
+score[0] = white piece.name, old square, new square
+score[1] = black piece.name, old square, new square
+""" 
+var score = []
 
+func udpate_score(piecename: String, old_space: String, new_space: String):
+	score.push_back([piecename, old_space, new_space])
+	print(score)
 
 # create dictionary of spaces
 # used in this class, and updated frequently, 
@@ -250,7 +258,11 @@ func consult_piece_mobility(piece, current_space):
 	pass
 
 
-
+func make_logical_move(piece, old_space: String, new_space: String):
+	var parity = "White"
+	if (piece.parity): parity = "Black"
+	score.push_back([parity + piece.name, old_space, new_space])
+	print(score)
 
 
 
@@ -274,7 +286,6 @@ func get_legal_spaces(piece):
 func update_board_state():
 	# keep roster of spaces : pieces current
 	update_spaces_dictionary()
-	#print(most_recent_move)
 
 
 # Called when the node enters the scene tree for the first time.

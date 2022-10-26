@@ -206,7 +206,7 @@ func _input(event):
 				for space in legal_spaces:
 					var space_rect = get_parent().get_parent().get_parent().get_node("Board").calculate_square_rect(space)
 					if (is_in_rect(get_global_mouse_position(), space_rect)):
-						
+							
 						# piece will lerp into the new rest zone
 						self.rest_point = space_rect.position
 						
@@ -219,6 +219,9 @@ func _input(event):
 						# legally place the piece (in the physics loop)
 						self.previous_space = current_space
 						self.current_space = space
+						
+						# updates board_state and score
+						get_parent().get_parent().get_parent().make_logical_move(self, previous_space, current_space)
 						
 						return
 				
@@ -253,8 +256,14 @@ func _physics_process(delta):
 			10 # 5 pixels down
 		)
 		if (is_in_rect(global_position, ten_pixels_away)):
+			# physically moves the pieceSprite to the space in question
 			get_parent().get_parent().place_piece(self, current_space)
-		#	global_position = rest_point
+			
+			
+			# need a way to logically move the piece to the space in question
+			
+			
+			# this line is redundant and im pretty sure i can delete it
 			update_piece_sprite_rect()
 			self.just_dropped = false
 			

@@ -30,6 +30,9 @@ func increment_name(pieceName: String):
         [] make z indexes more explicit
     [x] pieces now keep track of what space they are on (i can iterate pieces in the tree)
     [x] piees now keep track of what space they were on before being legally moved
+    [] added a score card (keeps track of move order)
+
+
     [] event handler:
         [x] collision works
         [x] clicking works

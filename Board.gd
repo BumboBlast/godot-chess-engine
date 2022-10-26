@@ -155,8 +155,6 @@ func place_piece(piece, new_space: String):
 	
 	# keep current, the record of the board state
 	get_parent().update_board_state()
-	
-	print( "this moved from: ", piece.previous_space)
 
 
 
