@@ -34,6 +34,8 @@ var castling_rights = [
 	false #A1
 ]
 
+# boolean keeps track of a capture
+var just_captured = false
 
 # enpassant target
 # can be a space or '-'
@@ -174,7 +176,13 @@ func knight_mobility(piece, current_space):
 	for filerank in range(0, file_offset.size(), 1):
 		var considered_space = (char(ord(current_space[0]) + \
 		file_offset[filerank])) + (char(ord(current_space[1]) + rank_offset[filerank]))
-		if (!is_occupied(considered_space)):
+		
+		var occupying_piece = is_occupied(considered_space)
+		if (!occupying_piece):
+			knight_mobility_set.push_back(considered_space)
+			
+		# if able to capture enemy piece
+		elif (occupying_piece.parity != piece.parity):
 			knight_mobility_set.push_back(considered_space)
 	
 	return knight_mobility_set
@@ -183,7 +191,6 @@ func knight_mobility(piece, current_space):
 
 func bishop_mobility(piece, current_space):
 	var bishop_mobility_set = []
-	
 	# calculate all 4 diagonals starting from the bishops space
 	for orientation in range(0,4):
 		for n in range(1, 8):
@@ -194,9 +201,16 @@ func bishop_mobility(piece, current_space):
 			if (orientation == 1 or orientation == 2): file_offset = - 1
 			if (orientation == 0 or orientation == 1): rank_offset = -1
 			
-			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) \
-			+ (char(ord(current_space[1]) + (n * rank_offset))))
-			if (is_occupied(next_space)): break
+			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) + (char(ord(current_space[1]) + (n * rank_offset))))
+			
+			# break if going to run into an occupied square UNLESS its a capture
+			var occupying_piece = is_occupied(next_space)
+			if (occupying_piece):
+				if (occupying_piece.parity != piece.parity): 
+					bishop_mobility_set.push_back(next_space)
+					break
+				else: break
+			
 			bishop_mobility_set.push_back(next_space)
 	
 	return bishop_mobility_set
@@ -205,11 +219,11 @@ func bishop_mobility(piece, current_space):
 func rook_mobility(piece, current_space):
 	var rook_mobility_set = []
 	
-	# calculate all 4 diagonals starting from the bishops space
+	# calculate all 4 rows/columns starting from the rooks space
 	for orientation in range(0,4):
 		for n in range(1, 8):
 			
-			# controls which diagonal to check, out of the 4
+			# controls which row/column to check, out of the 4
 			var file_offset = 1
 			var rank_offset = 1
 			
@@ -224,9 +238,16 @@ func rook_mobility(piece, current_space):
 				rank_offset = 0
 			
 			
-			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) \
-			 + (char(ord(current_space[1]) + (n * rank_offset))))
-			if (is_occupied(next_space)): break
+			var next_space = ((char(ord(current_space[0]) + (n * file_offset))) + (char(ord(current_space[1]) + (n * rank_offset))))
+			
+			# break if going to run into an occupied square UNLESS its a capture
+			var occupying_piece = is_occupied(next_space)
+			if (occupying_piece):
+				if (occupying_piece.parity != piece.parity): 
+					rook_mobility_set.push_back(next_space)
+					break
+				else: break
+			
 			rook_mobility_set.push_back(next_space)
 	
 	return rook_mobility_set
@@ -250,7 +271,13 @@ func king_mobility(piece, current_space):
 	for filerank in range(0, file_offset.size(), 1):
 		var considered_space = (char(ord(current_space[0]) + \
 		file_offset[filerank])) + (char(ord(current_space[1]) + rank_offset[filerank]))
-		if (!is_occupied(considered_space)):
+		
+		var occupying_piece = is_occupied(considered_space)
+		if (!occupying_piece):
+			king_mobility_set.push_back(considered_space)
+		
+		# if able to capture enemy piece
+		elif (occupying_piece.parity != piece.parity):
 			king_mobility_set.push_back(considered_space)
 	
 	king_mobility_set += try_castling(piece, current_space)
@@ -352,6 +379,24 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (old_space == "A8"): castling_rights[1] = false
 		if (old_space == "H1"): castling_rights[2] = false
 		if (old_space == "A1"): castling_rights[3] = false
+	
+	# if move resulted in a capture
+	var occupying_piece = is_occupied(new_space)
+	if (occupying_piece):
+		print( "made a capture ")
+		for p in $Board/AllPieces.get_children():
+			if p == occupying_piece: 
+				
+				# call piece's destructor after refactoring:
+				p.queue_free()
+				break
+	
+	# keep current, the record of the board state
+	update_spaces_dictionary()
+
+
+
+
 
 
 
@@ -376,6 +421,6 @@ func get_legal_spaces(piece):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	update_spaces_dictionary()
+	
 	
 	pass

@@ -152,9 +152,9 @@ func place_piece(piece, new_space: String):
 	# this operation is executed already during the input event in pieece
 	#  after "dropping" a piece over a legal square
 	piece.current_space = new_space
-	
-	# keep current, the record of the board state
-	get_parent().update_spaces_dictionary()
+
+
+
 
 
 
@@ -286,7 +286,8 @@ func loadFen(fen: String):
 			
 		if (considering_fullmove_number):
 			get_parent().fullmove_clock += ch
-
+		
+	get_parent().update_spaces_dictionary()
 
 
 

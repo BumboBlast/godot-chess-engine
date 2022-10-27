@@ -32,7 +32,15 @@ func increment_name(pieceName: String):
     [x] piees now keep track of what space they were on before being legally moved
     [] added a score card (keeps track of move order)
     [] make rook movement (during castling) lerp
-    [] make sure castling checks for all inbetween spaces as legality
+    [x] make sure castling checks for all legality  
+        [x] castling checks if a rook is there
+        [x] castling checks castling_rights boolean
+        [x] castling now checks if a rook or a king has ever moved
+    
+    []  capturing works
+        [] turns work
+        [x] pieces leave board when captured
+        [x] captures only opposite color
     ---- 
     right now place_piece (mostly) physically moves the sprite, and is located in baord (called in piece)
     logical_move legally moves the piece , and is located in rules (called in piece)
@@ -76,19 +84,19 @@ func increment_name(pieceName: String):
                 [] capturing
             [] knight rules
                 [x] normal move
-                [] capturing
+                [x] capturing
             [] bishop rules
                 [x] normal move
-                [] capturing
+                [x] capturing
             [] rook rules
                 [x] normal move
-                [] capturing
+                [x] capturing
             [] king rules
                 [x] normal move
-                [] capturing
+                [x] capturing
             [] queen rules
                 [x] normal move
-                [] capturing
+                [x] capturing
 
         
 debugging:  
@@ -106,4 +114,13 @@ debugging:
 
     Bug: knight moves off board when at Square A1. SOLVED: ranges are [,)
 
+    Bug: white king can castle on blacks side lol
+    Bug: rook doesnt work??? Bishops dont work???
+        SOLUTION: Since the pieces only understand occupied squares after
+        a call to update_spaces_dictionary,  Calling update_spaces_dictionary in loadFEN() resolves it. 
     
+    HARD Bug; Sometimes the game will crash when moveing pieces
+        -> sometimes happens after capturing alot
+        -> when it happens, it usually is a problem calling "piece.parity (on NULL instance)"
+            -> while calling Rook Legality
+            -> happend in bishop too (same block of code though)
