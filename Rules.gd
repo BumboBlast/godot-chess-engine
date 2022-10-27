@@ -349,9 +349,9 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	# if moved rook or king, no more castling
 	if ("Rook" in piece.name):
 		if (old_space == "H8"): castling_rights[0] = false
-		if (old_space == "C8"): castling_rights[1] = false
+		if (old_space == "A8"): castling_rights[1] = false
 		if (old_space == "H1"): castling_rights[2] = false
-		if (old_space == "C1"): castling_rights[3] = false
+		if (old_space == "A1"): castling_rights[3] = false
 
 
 
