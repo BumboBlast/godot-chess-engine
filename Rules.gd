@@ -87,8 +87,25 @@ func get_fen():
 	pass
 
 
+# returns true if spaces between rook and king are unoccupied
+func spaces_between_rook_and_king_are_clear(space1: String, space2: String):
+
+	var file1 = ord(space1[0])
+	var file2 = ord(space2[0])
+	var col = space1[1]
+	var step = -1
+	if ((file1 - file2) < 0): step = 1
+	
+	for f in range(file1 + step, file2, step):
+		var check_this_space = char(f) + space1[1]
+		if (is_occupied(check_this_space)): return false
+	
+	return true
+
+
 # returns king's castling target squares to be appended to legal spaces
 # casling rights boolean will be updated after each move in board_state func
+# might need a refactor. I think the last if (Rook) is redundant
 func try_castling(piece, current_space):
 	
 	var castling_targets = ["G8", "C8", "G1", "C1"]
@@ -101,9 +118,10 @@ func try_castling(piece, current_space):
 		var corner = is_occupied(rook_spaces[index])
 		if (corner):
 			if (castling_rights[index]):
-				if ("Rook" in corner.name):
-					valid_targets.push_back(castling_targets[index])
-
+				if (spaces_between_rook_and_king_are_clear(rook_spaces[index], current_space)):
+					if ("Rook" in corner.name):
+						valid_targets.push_back(castling_targets[index])
+	
 	return valid_targets
 
 
@@ -277,38 +295,36 @@ func consult_piece_mobility(piece, current_space):
 
 func just_castled(piecename: String, old_space: String, new_space: String):
 	
-	if ("King" in piecename): 
-		var king_moved_spaces = ord(new_space[0]) - ord(old_space[0])
-		if (abs(king_moved_spaces) == 2):
-			
-			# return concerned rook and new rook space as [x, y]
-			var old_rook_space
-			var new_rook_space
-			
-			if (new_space == "G8"):
-				old_rook_space = "H8"
-				new_rook_space = "F8"
-				castling_rights[0] = false
-				castling_rights[1] = false
-			if (new_space == "C8"):
-				old_rook_space = "A8"
-				new_rook_space = "D8"
-				castling_rights[0] = false
-				castling_rights[1] = false
-			if (new_space == "G1"):
-				old_rook_space = "H1"
-				new_rook_space = "F1"
-				castling_rights[2] = false
-				castling_rights[3] = false
-			if (new_space == "C1"):
-				old_rook_space = "A1"
-				new_rook_space = "D1"
-				castling_rights[2] = false
-				castling_rights[3] = false
-
-
-			return [old_rook_space, new_rook_space]
-
+	var king_moved_spaces = ord(new_space[0]) - ord(old_space[0])
+	if (abs(king_moved_spaces) == 2):
+		
+		# return concerned rook and new rook space as [x, y]
+		var old_rook_space
+		var new_rook_space
+		
+		if (new_space == "G8"):
+			old_rook_space = "H8"
+			new_rook_space = "F8"
+			castling_rights[0] = false
+			castling_rights[1] = false
+		if (new_space == "C8"):
+			old_rook_space = "A8"
+			new_rook_space = "D8"
+			castling_rights[0] = false
+			castling_rights[1] = false
+		if (new_space == "G1"):
+			old_rook_space = "H1"
+			new_rook_space = "F1"
+			castling_rights[2] = false
+			castling_rights[3] = false
+		if (new_space == "C1"):
+			old_rook_space = "A1"
+			new_rook_space = "D1"
+			castling_rights[2] = false
+			castling_rights[3] = false
+		
+		return [old_rook_space, new_rook_space]
+	
 	return false
 
 
@@ -319,9 +335,23 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	score.push_back([parity + piece.name, old_space, new_space])
 	
 	# if castled, move the rook and then disable castling for that color
-	var just_castled = just_castled(piece.name, old_space, new_space)
-	if (just_castled):
-		$Board.place_piece(occupied_spaces[just_castled[0]], just_castled[1])
+	if ("King" in piece.name):
+		var just_castled = just_castled(piece.name, old_space, new_space)
+		if (just_castled):
+			$Board.place_piece(occupied_spaces[just_castled[0]], just_castled[1])
+		if (piece.parity):
+			castling_rights[0] = false
+			castling_rights[1] = false
+		else:
+			castling_rights[2] = false
+			castling_rights[3] = false
+	
+	# if moved rook or king, no more castling
+	if ("Rook" in piece.name):
+		if (old_space == "H8"): castling_rights[0] = false
+		if (old_space == "C8"): castling_rights[1] = false
+		if (old_space == "H1"): castling_rights[2] = false
+		if (old_space == "C1"): castling_rights[3] = false
 
 
 
@@ -338,7 +368,6 @@ func get_legal_spaces(piece):
 	# trim moves that are off board (very important!!)
 	piece_mobility = trim_moves(piece_mobility, piece, p_current_space)
 
-	print (castling_rights)
 	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
