@@ -124,3 +124,13 @@ debugging:
         -> when it happens, it usually is a problem calling "piece.parity (on NULL instance)"
             -> while calling Rook Legality
             -> happend in bishop too (same block of code though)
+                -> bug happens after:
+                    white queen kill black pawn on e4
+                    black queen kill white pawn on d4
+                    click   black knight on C6
+                            white queen on d5
+                            white knight on f3
+                                moving another piece fixes it
+                    
+                    black queen kills white pawn on d4
+                    then click white knight on f3
