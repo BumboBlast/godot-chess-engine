@@ -39,8 +39,8 @@ game keeps track of whos turn it is
         [x] castling checks castling_rights boolean
         [x] castling now checks if a rook or a king has ever moved
     
-    []  capturing works
-        [] turns work
+    [x]  capturing works
+        [x] turns work
         [x] pieces leave board when captured
         [x] captures only opposite color
     ---- 
@@ -78,6 +78,13 @@ game keeps track of whos turn it is
         [x] calulcate legal moves based on piece held by consulting list of rules
         [x] refine legal moves list based upon other pieces on the board
         [] refine legal moves list based upon other things (en passant, castling, stalemtn, check)
+
+        [] check
+            [x] checks if king is being attacked
+               [] (sometimes only updates the next turn)
+            [] impossible to put yourself in check
+            [] if in check, can only make moves that escape check
+            
             [] pawn rules
                 [x] move one space
                 [x] move pawn 2 spaces if on second/ seventh rank

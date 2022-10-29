@@ -63,6 +63,14 @@ var score = []
 
 
 
+var white_king_space: String
+var black_king_space: String
+
+var white_in_check: bool
+var black_ing_check: bool
+
+
+
 # create dictionary of spaces
 # used in this class, and updated frequently, 
 # rather than calling node tree hundreds of times
@@ -301,22 +309,47 @@ func king_mobility(piece, current_space):
 
 
 
+
+func is_king_in_check(parity: bool):
+	
+	var kings_space = white_king_space
+	if (parity): kings_space = black_king_space
+	
+	for piece in $Board/AllPieces.get_children():
+		var legal_set = get_legal_spaces(piece)
+		
+		for move in legal_set:
+			if (move == kings_space):
+				return true
+	return false
+
+
+
+
+func is_space_offboard(space: String):
+	if (ord(space[0]) < ord('A')) or (ord(space[0]) > ord('H')) or \
+	(ord(space[1]) < ord('1')) or (ord(space[1]) > ord('8')):
+		return true
+	return false
+
+
 # trim off the moves that are illegal or off board (also illegal)
-func trim_moves(moves: Array, piece, current_space: String):
+# also take off moves that dont remove the king from check
+# also take off moves that place the king in check
+func trim_moves(moves: Array, piece):
 	
 	# trim the off-board moves
 	for index in range(moves.size() - 1, -1, -1):
 		var move = moves[index]
-		if (ord(move[0]) < ord('A')) or (ord(move[0]) > ord('H')) or \
-		(ord(move[1]) < ord('1')) or (ord(move[1]) > ord('8')) or \
-		(move == current_space):
+		if is_space_offboard(move) or (move == piece.current_space):
 			moves.erase(move)
 	return moves
 	pass
 
 # returns the set of moves that a piece could make
-func consult_piece_mobility(piece, current_space):
+func consult_piece_mobility(piece):
 	var piece_mobility_set = []
+	var current_space = piece.current_space
 	
 	if (piece.name.begins_with("Pawn")):
 		piece_mobility_set = pawn_mobility(piece, current_space)
@@ -383,9 +416,11 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (just_castled):
 			$Board.place_piece(occupied_spaces[just_castled[0]], just_castled[1])
 		if (piece.parity):
+			black_king_space = new_space
 			castling_rights[0] = false
 			castling_rights[1] = false
 		else:
+			white_king_space = new_space
 			castling_rights[2] = false
 			castling_rights[3] = false
 	
@@ -411,8 +446,16 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	# change active color (your turn!)
 	active_color = (!active_color)
 	
+	
+	
 	# keep current, the record of the board state
 	update_spaces_dictionary()
+	
+	# this function is called AFTER making a move. 
+	# so it should consider if the NEW active color is in check because of this move
+	# (it will eventually be impossible to put yourself in check)
+	if (is_king_in_check(active_color)):
+		print (get_active_color(), " is in check")
 
 
 
@@ -424,15 +467,14 @@ func make_logical_move(piece, old_space: String, new_space: String):
 # should be able to return a list
 func get_legal_spaces(piece):
 	
-	var p_current_space = piece.current_space
-	
 	# list of spaces a piece could move if the board were empty
-	var piece_mobility = consult_piece_mobility(piece, p_current_space)
+	var piece_mobility = consult_piece_mobility(piece)
 	
 	# trim moves that are off board (very important!!)
-	piece_mobility = trim_moves(piece_mobility, piece, p_current_space)
+	# trim moves that violate check
+	piece_mobility = trim_moves(piece_mobility, piece)
 
-	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
+	#print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
 

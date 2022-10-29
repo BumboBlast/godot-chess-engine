@@ -218,8 +218,12 @@ func loadFen(fen: String):
 			if (ch == 'B'): add_piece("Bishop", "Light", space)
 			if (ch == 'r'): add_piece("Rook", "Dark", space)
 			if (ch == 'R'): add_piece("Rook", "Light", space)
-			if (ch == 'k'): add_piece("King", "Dark", space)
-			if (ch == 'K'): add_piece("King", "Light", space)
+			if (ch == 'k'): 
+				add_piece("King", "Dark", space)
+				get_parent().black_king_space = space
+			if (ch == 'K'): 
+				add_piece("King", "Light", space)
+				get_parent().white_king_space = space
 			if (ch == 'q'): add_piece("Queen", "Dark", space)
 			if (ch == 'Q'): add_piece("Queen", "Light", space)
 			
@@ -244,6 +248,8 @@ func loadFen(fen: String):
 			
 			if (ch == 'b'):
 				get_parent().set_active_color("black")
+				# so that black's move is always on an odd index
+				get_parent().score.push_back(["", "", ""])
 			elif (ch == 'w'):
 				get_parent().set_active_color("white")
 			
@@ -287,6 +293,9 @@ func loadFen(fen: String):
 		if (considering_fullmove_number):
 			get_parent().fullmove_clock += ch
 		
+	
+	
+	# update score and spaces dictionary
 	get_parent().update_spaces_dictionary()
 
 
@@ -294,7 +303,6 @@ func loadFen(fen: String):
 
 func _ready():
 	
-	print("board ready")
 	pass
 	
 	
