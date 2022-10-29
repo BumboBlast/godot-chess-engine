@@ -129,12 +129,9 @@ func try_castling(piece, current_space):
 
 # returns the piece if occupied, else returns false if empty
 func is_occupied(space):
-	var occupied_array = []
 	
 	for sp in occupied_spaces:
-		
-		occupied_array.push_back(sp)
-		if (occupied_array.back() == space):
+		if (sp == space):
 			return occupied_spaces[space]
 	
 	return false
@@ -178,7 +175,6 @@ func knight_mobility(piece, current_space):
 		file_offset[filerank])) + (char(ord(current_space[1]) + rank_offset[filerank]))
 		
 		var occupying_piece = is_occupied(considered_space)
-		print (" knight is targeting: ", occupying_piece)
 		if (!occupying_piece):
 			knight_mobility_set.push_back(considered_space)
 			
@@ -381,6 +377,7 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (old_space == "H1"): castling_rights[2] = false
 		if (old_space == "A1"): castling_rights[3] = false
 	
+	
 	# if move resulted in a capture
 	var occupying_piece = is_occupied(new_space)
 	if (occupying_piece):
@@ -388,13 +385,13 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		for p in $Board/AllPieces.get_children():
 			if p == occupying_piece: 
 				
+				print( "found it ")
 				# call piece's destructor after refactoring:
-				p.queue_free()
+				p.free()
 				break
 	
 	# keep current, the record of the board state
 	update_spaces_dictionary()
-
 
 
 
