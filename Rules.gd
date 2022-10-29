@@ -7,18 +7,18 @@ var active_color: bool
 
 
 func get_active_color():
-	if (active_color == true):
-		return "dark"
+	if (active_color):
+		return "black"
 	else:
-		return "light"
+		return "white"
 
 
 
 
 func set_active_color(color: String):
-	if (color == "light"):
+	if (color == "white"):
 		active_color = false
-	elif (color == "dark"):
+	elif (color == "black"):
 		active_color = true
 	else:
 		active_color = false
@@ -407,6 +407,9 @@ func make_logical_move(piece, old_space: String, new_space: String):
 				# call piece's destructor after refactoring:
 				p.free()
 				break
+	
+	# change active color (your turn!)
+	active_color = (!active_color)
 	
 	# keep current, the record of the board state
 	update_spaces_dictionary()

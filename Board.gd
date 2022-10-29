@@ -243,9 +243,9 @@ func loadFen(fen: String):
 		if (considering_active_color):
 			
 			if (ch == 'b'):
-				get_parent().set_active_color("dark")
+				get_parent().set_active_color("black")
 			elif (ch == 'w'):
-				get_parent().set_active_color("light")
+				get_parent().set_active_color("white")
 			
 			# next pass, do  castling rights
 			if (ch == ' '):

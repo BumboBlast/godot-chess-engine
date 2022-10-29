@@ -18,6 +18,8 @@ pieces are scaled with the board
 pieces are dynamically named correctly
 func increment_name(pieceName: String):
 
+
+game keeps track of whos turn it is
 --------------------------------------------------------------------------------
 
     [x] piece load texture (piece)
