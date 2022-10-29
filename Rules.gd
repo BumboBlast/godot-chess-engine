@@ -178,6 +178,7 @@ func knight_mobility(piece, current_space):
 		file_offset[filerank])) + (char(ord(current_space[1]) + rank_offset[filerank]))
 		
 		var occupying_piece = is_occupied(considered_space)
+		print (" knight is targeting: ", occupying_piece)
 		if (!occupying_piece):
 			knight_mobility_set.push_back(considered_space)
 			

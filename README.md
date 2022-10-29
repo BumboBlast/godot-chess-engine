@@ -133,4 +133,9 @@ debugging:
                                 moving another piece fixes it
                     
                     black queen kills white pawn on d4
-                    then click white knight on f3
+                    then click  white knight on f3
+                                black knight on c6
+                    
+                    PRETTY SURE: happens after:
+                        clicked piece COULD move to a space where a capture has JUST occured
+                        it seems, the call is_occupied() is returning a Deleted Object 
