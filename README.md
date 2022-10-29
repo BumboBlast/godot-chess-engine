@@ -81,7 +81,7 @@ func increment_name(pieceName: String):
                 [x] move pawn 2 spaces if on second/ seventh rank
                 [] enpassant
                 [] promoting
-                [] capturing
+                [x] capturing
             [] knight rules
                 [x] normal move
                 [x] capturing
@@ -139,3 +139,6 @@ debugging:
                     PRETTY SURE: happens after:
                         clicked piece COULD move to a space where a capture has JUST occured
                         it seems, the call is_occupied() is returning a Deleted Object 
+
+        
+        BUG FIX: piece calls free() instead of queue_free() upon capture

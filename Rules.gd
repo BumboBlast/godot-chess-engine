@@ -146,11 +146,22 @@ func pawn_mobility(piece, current_space):
 		direction = -1
 		second_seventh_rank = '7'
 	
+	# concern the movement squares
 	var space_ahead = current_space[0] + (char(ord(current_space[1]) + (1 * direction)))
 	var two_spaces_ahead = space_ahead[0] + (char(ord(space_ahead[1]) + (1 * direction)))
 	
+	# concern the capture squares
+	var space_ahead_left = char(ord(current_space[0]) - 1) + (char(ord(current_space[1]) + (1 * direction)))
+	var space_ahead_right = char(ord(current_space[0]) + 1) + (char(ord(current_space[1]) + (1 * direction)))
+	
+	# piece objects
+	var occupying_piece_ahead = is_occupied(space_ahead)
+	var occupying_piece_ahead_left = is_occupied(space_ahead_left)
+	var occupying_piece_ahead_right = is_occupied(space_ahead_right)
+	
+	
 	# if space ahead is not occupied
-	if (!is_occupied(space_ahead)):
+	if (!occupying_piece_ahead):
 		# de(in)crement rank 
 		pawn_mobility_set.push_back(space_ahead)
 		
@@ -160,6 +171,14 @@ func pawn_mobility(piece, current_space):
 			if (!is_occupied(two_spaces_ahead)):
 				pawn_mobility_set.push_back(two_spaces_ahead)
 	
+	# if can capture;
+	if (occupying_piece_ahead_left):
+		if (occupying_piece_ahead_left.parity != piece.parity):
+			pawn_mobility_set.push_back(space_ahead_left)
+	if (occupying_piece_ahead_right):
+		if (occupying_piece_ahead_right.parity != piece.parity):
+			pawn_mobility_set.push_back(space_ahead_right)
+
 	return pawn_mobility_set
 
 
@@ -385,7 +404,6 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		for p in $Board/AllPieces.get_children():
 			if p == occupying_piece: 
 				
-				print( "found it ")
 				# call piece's destructor after refactoring:
 				p.free()
 				break
