@@ -90,12 +90,12 @@ game keeps track of whos turn it is
             [x] impossible to put yourself in check
             [x] if in check, can only make moves that escape check
             [x] cant castle (if in ) out check
-            [] cant castle through check
+            [x] cant castle through check
 
             [] pawn rules
                 [x] move one space
                 [x] move pawn 2 spaces if on second/ seventh rank
-                [] enpassant
+                [x] enpassant
                 [] promoting
                 [x] capturing
             [] knight rules

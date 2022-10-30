@@ -158,6 +158,7 @@ func is_occupied(space):
 
 # returns set of legal spaces the Pawn in question can move
 func pawn_mobility(piece, current_space):
+	
 	var pawn_mobility_set = []
 	var direction = 1
 	var second_seventh_rank = 2
@@ -198,6 +199,10 @@ func pawn_mobility(piece, current_space):
 	if (occupying_piece_ahead_right):
 		if (occupying_piece_ahead_right.parity != piece.parity):
 			pawn_mobility_set.push_back(space_ahead_right)
+	
+	# if can enpassant:
+	if (enpassant_target != "-"):
+		pawn_mobility_set.push_back(enpassant_target)
 
 	return pawn_mobility_set
 
@@ -496,6 +501,7 @@ func just_castled(piecename: String, old_space: String, new_space: String):
 func make_logical_move(piece, old_space: String, new_space: String):
 	var parity = "White"
 	if (piece.parity): parity = "Black"
+	var last_move = score.back()
 	score.push_back([parity + piece.name, old_space, new_space])
 	
 	# if castled, move the rook and then disable castling for that color
@@ -519,6 +525,39 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (old_space == "H1"): castling_rights[2] = false
 		if (old_space == "A1"): castling_rights[3] = false
 	
+	
+	
+	# if en_passant is legal now
+	if ("Pawn" in piece.name):
+		# if the pawn moved two spaces
+		if (abs(ord(old_space[1]) - ord(new_space[1])) == 2):
+			# if there is any pawn is one file away from the last_move's pawn's current space
+			for pawn in $Board/AllPieces.get_children():
+				if ("Pawn" in pawn.name):
+					if (abs(ord(pawn.current_space[0]) - ord(new_space[0])) == 1):
+						if (pawn.current_space[1] == new_space[1]):
+							# only one en passant target can exist at once
+							var rank_offset = 1
+							if (pawn.parity): rank_offset = -1
+							var space_before = new_space[0] + char(ord(new_space[1]) + rank_offset)
+							enpassant_target = space_before
+							print( "en passant is legal ", enpassant_target)
+	
+	# if this move was an enpassant:
+	if ("Pawn" in piece.name):
+		if (new_space == enpassant_target):
+			
+			print (" you just did an enpassant")
+			# capture the pawn in question
+			var rank_offset = 1
+			if (piece.parity): rank_offset = -1
+			var pawn_behind_space = new_space[0] + char(ord(new_space[1]) - rank_offset)
+			var pawn_behind_piece = is_occupied(pawn_behind_space)
+			if (pawn_behind_piece):
+				pawn_behind_piece.free()
+			else:
+				print( "error finding that pawn")
+			enpassant_target = "-"
 	
 	# if move resulted in a capture
 	var occupying_piece = is_occupied(new_space)
@@ -552,8 +591,6 @@ func make_logical_move(piece, old_space: String, new_space: String):
 			black_in_check = false
 		else:
 			white_in_check = false
-	
-	print(castling_rights)
 
 
 
