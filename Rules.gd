@@ -128,9 +128,10 @@ func try_castling(piece, current_space):
 		var corner = is_occupied(rook_spaces[index])
 		if (corner):
 			if (castling_rights[index]):
-				if (spaces_between_are_clear(rook_spaces[index], current_space)):
-					if ("Rook" in corner.name):
-						valid_targets.push_back(castling_targets[index])
+				if (current_space[1] == rook_spaces[index][1]):
+					if (spaces_between_are_clear(rook_spaces[index], current_space)):
+						if ("Rook" in corner.name):
+							valid_targets.push_back(castling_targets[index])
 	
 	return valid_targets
 
