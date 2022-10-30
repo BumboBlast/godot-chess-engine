@@ -133,7 +133,17 @@ func try_castling(piece, current_space):
 						if ("Rook" in corner.name):
 							valid_targets.push_back(castling_targets[index])
 	
+	#this line feels cheeky
 	valid_targets = trim_violate_check_moves(valid_targets, piece)
+	
+	
+	#
+	#
+	#
+	# cant castle through check
+	#
+	#
+	
 	
 	return valid_targets
 
@@ -313,7 +323,9 @@ func king_mobility(piece, current_space):
 		elif (occupying_piece.parity != piece.parity):
 			king_mobility_set.push_back(considered_space)
 	
-	king_mobility_set += try_castling(piece, current_space)
+	# technically, no one can castle if anyone is in check
+	if (!white_in_check and !black_in_check):
+		king_mobility_set += try_castling(piece, current_space)
 	return king_mobility_set
 
 
@@ -364,7 +376,7 @@ func suppose_next_move(old_square: String, new_square: String):
 	occupied_spaces.erase(old_square)
 	occupied_spaces[new_square] = piece
 	
-	
+	# if this position (1 move ahead) is in check
 	if (is_king_in_check(piece.parity)):
 		print("the ", piece.parity, " king is in check after moving to  ", new_square)
 		update_spaces_dictionary()
@@ -408,8 +420,9 @@ func trim_violate_check_moves(moves: Array, piece):
 	# trim the moves that violate check
 	for index in range(moves.size() - 1, -1, -1):
 		var move = moves[index]
+		
+		# if the move in question is illegal
 		if (!suppose_next_move(piece.current_space, move)):
-			print( "This move is illegal:", piece.current_space, ", to ", move)
 			moves.erase(move)
 	return moves
 	pass

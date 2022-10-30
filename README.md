@@ -34,6 +34,7 @@ game keeps track of whos turn it is
     [x] piees now keep track of what space they were on before being legally moved
     [] added a score card (keeps track of move order)
     [] make rook movement (during castling) lerp
+
     [x] make sure castling checks for all legality  
         [x] castling checks if a rook is there
         [x] castling checks castling_rights boolean
@@ -43,6 +44,8 @@ game keeps track of whos turn it is
         [x] turns work
         [x] pieces leave board when captured
         [x] captures only opposite color
+        [] only consider castling for the correct color
+        [] cant castle through or out of check
     ---- 
     right now place_piece (mostly) physically moves the sprite, and is located in baord (called in piece)
     logical_move legally moves the piece , and is located in rules (called in piece)
@@ -83,7 +86,7 @@ game keeps track of whos turn it is
             [x] checks if king is being attacked
             [x] impossible to put yourself in check
             [x] if in check, can only make moves that escape check
-            [] cant castle out of check
+            [x] cant castle (if in ) out check
             [] cant castle through check
 
             [] pawn rules
@@ -119,12 +122,15 @@ debugging:
     Board's calculate boardsquare
     ( i think i fixed it by making sure get_legal_spaces returns an array)
 
-    BUG:
+    [solved] BUG:
         pieces can move off board. (there are legal spaces outside the board B9, etc)
 
-    Bug: knight moves off board when at Square A1. SOLVED: ranges are [,)
+    [solve] Bug: knight moves off board when at Square A1. SOLVED: ranges are [,)
 
-    -> Bug: white king can castle on blacks side lol
+    [solved]-> Bug: white king can castle on blacks side lol
+    [solved]-> bug: white queenside castling triggers black not being allowed to castle anymore
+
+
     [solved] Bug: rook doesnt work??? Bishops dont work???
         SOLUTION: Since the pieces only understand occupied squares after
         a call to update_spaces_dictionary,  Calling update_spaces_dictionary in loadFEN() resolves it. 
