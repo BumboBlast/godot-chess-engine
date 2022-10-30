@@ -96,7 +96,8 @@ game keeps track of whos turn it is
                 [x] move one space
                 [x] move pawn 2 spaces if on second/ seventh rank
                 [x] enpassant
-                [] promoting
+                    [x] its buggy
+                [x] promoting
                 [x] capturing
             [] knight rules
                 [x] normal move
@@ -161,3 +162,7 @@ debugging:
 
         
         BUG FIX: piece calls free() instead of queue_free() upon capture
+
+    [solved] BUG:   1...    H6 H5,
+                    2.BH6   G7 G5, (triggers enpassant target)
+                    3.G2 G3 G5 G4, crashes

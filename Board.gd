@@ -294,7 +294,9 @@ func loadFen(fen: String):
 			get_parent().fullmove_clock += ch
 		
 	
-	
+	if (get_parent().enpassant_target == "-"):
+		get_parent().enpassant_legal = false
+		get_parent().enpassant_target = ""
 	# update score and spaces dictionary
 	get_parent().update_spaces_dictionary()
 

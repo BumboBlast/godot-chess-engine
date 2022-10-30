@@ -39,6 +39,7 @@ var just_captured = false
 
 # enpassant target
 # can be a space or '-'
+var enpassant_legal = false
 var enpassant_target: String
 
 # how many moves both players have made since the last pawn advance or piece capture
@@ -201,7 +202,7 @@ func pawn_mobility(piece, current_space):
 			pawn_mobility_set.push_back(space_ahead_right)
 	
 	# if can enpassant:
-	if (enpassant_target != "-"):
+	if (enpassant_legal):
 		pawn_mobility_set.push_back(enpassant_target)
 
 	return pawn_mobility_set
@@ -497,6 +498,28 @@ func just_castled(piecename: String, old_space: String, new_space: String):
 	return false
 
 
+
+
+func last_move_was_enpassant(piece, new_space):
+	if (piece):
+		if ("Pawn" in piece.name):
+			if (new_space == enpassant_target):
+				return true
+	return false
+
+
+func capture_pawn_enpassant(piece, new_space):
+	var rank_offset = 1
+	if (piece.parity): rank_offset = -1
+	var pawn_behind_space = new_space[0] + char(ord(new_space[1]) - rank_offset)
+	var pawn_behind_piece = is_occupied(pawn_behind_space)
+	if (pawn_behind_piece):
+		pawn_behind_piece.free()
+		enpassant_legal = false
+	else:
+		print( "error finding that pawn")
+
+
 # updates the board state and score with each real, legal move
 func make_logical_move(piece, old_space: String, new_space: String):
 	var parity = "White"
@@ -526,8 +549,16 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (old_space == "A1"): castling_rights[3] = false
 	
 	
+	# if this move was an enpassant:
+	if (enpassant_legal):
+		if (last_move_was_enpassant(piece, new_space)):
+			# capture the pawn in question
+			capture_pawn_enpassant(piece, new_space)
+		else: 
+			enpassant_legal = false
+			enpassant_target = ""
 	
-	# if en_passant is legal now
+	# if this move made enpassant legal 
 	if ("Pawn" in piece.name):
 		# if the pawn moved two spaces
 		if (abs(ord(old_space[1]) - ord(new_space[1])) == 2):
@@ -540,29 +571,29 @@ func make_logical_move(piece, old_space: String, new_space: String):
 							var rank_offset = 1
 							if (pawn.parity): rank_offset = -1
 							var space_before = new_space[0] + char(ord(new_space[1]) + rank_offset)
+							enpassant_legal = true
 							enpassant_target = space_before
-							print( "en passant is legal ", enpassant_target)
+							print( "en passant is now legal ", enpassant_target)
+
 	
-	# if this move was an enpassant:
+	
+	# if pawn is at last rank (promote)
 	if ("Pawn" in piece.name):
-		if (new_space == enpassant_target):
+		var last_rank = '8'
+		if (piece.parity): last_rank = '1'
+		if (new_space[1] == last_rank):
+			print(" promote")
+			#promote
+			for this_piece in $Board/AllPieces.get_children():
+				if (this_piece == piece):
+					this_piece.queue_free()
+					$Board.add_piece("Queen", "Light", new_space)
+					break
 			
-			print (" you just did an enpassant")
-			# capture the pawn in question
-			var rank_offset = 1
-			if (piece.parity): rank_offset = -1
-			var pawn_behind_space = new_space[0] + char(ord(new_space[1]) - rank_offset)
-			var pawn_behind_piece = is_occupied(pawn_behind_space)
-			if (pawn_behind_piece):
-				pawn_behind_piece.free()
-			else:
-				print( "error finding that pawn")
-			enpassant_target = "-"
 	
 	# if move resulted in a capture
 	var occupying_piece = is_occupied(new_space)
 	if (occupying_piece):
-		print( "made a capture ")
 		for p in $Board/AllPieces.get_children():
 			if p == occupying_piece: 
 				
