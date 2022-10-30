@@ -98,8 +98,15 @@ func get_fen():
 
 
 # returns true if spaces between a piece and another (typically rook and king) are unoccupied
+# space 1 is kings_space
+"""
+order of the two if -return statements below matter (this is scary)
+"""
 func spaces_between_are_clear(space1: String, space2: String):
-
+	
+	# only do this calculation if the two spaces are on the same row
+	if (space1[1] != space2[1]): return false
+	
 	var file1 = ord(space1[0])
 	var file2 = ord(space2[0])
 	var col = space1[1]
@@ -109,13 +116,15 @@ func spaces_between_are_clear(space1: String, space2: String):
 	for f in range(file1 + step, file2, step):
 		var check_this_space = char(f) + space1[1]
 		if (is_occupied(check_this_space)): return false
+		if (!suppose_next_move(space1, check_this_space)): 
+			print ("castling trhough check")
+			return false
 	
 	return true
 
 
 # returns king's castling target squares to be appended to legal spaces
 # casling rights boolean will be updated after each move in board_state func
-# might need a refactor. I think the last if (Rook) is redundant
 func try_castling(piece, current_space):
 	
 	var castling_targets = ["G8", "C8", "G1", "C1"]
@@ -124,26 +133,16 @@ func try_castling(piece, current_space):
 	
 	var rook_spaces = ["H8", "A8", "H1", "A1"]
 	
-	for index in range(0, rook_spaces.size()):
-		var corner = is_occupied(rook_spaces[index])
-		if (corner):
-			if (castling_rights[index]):
-				if (current_space[1] == rook_spaces[index][1]):
-					if (spaces_between_are_clear(rook_spaces[index], current_space)):
-						if ("Rook" in corner.name):
-							valid_targets.push_back(castling_targets[index])
-	
-	#this line feels cheeky
-	valid_targets = trim_violate_check_moves(valid_targets, piece)
-	
-	
-	#
-	#
-	#
-	# cant castle through check
-	#
-	#
-	
+	# check the correct color king for castling eligibility
+	for corner in [0, 1, 2, 3]:
+		# if castling is allowed
+		if (castling_rights[corner]):
+			# if a rook is in the corner in question
+			if (is_occupied(rook_spaces[corner])):
+				if (is_occupied(rook_spaces[corner]).name.begins_with("Rook")):
+					# if you arent castling through occupied spaces
+					if (spaces_between_are_clear(current_space, rook_spaces[corner])):
+						valid_targets.push_back(castling_targets[corner])
 	
 	return valid_targets
 
@@ -343,13 +342,14 @@ func is_king_in_check(parity: bool):
 	
 	# if he is being attacked, retur true (yes, he is in check)
 	for piece in occupied_spaces.values():
+		
 		# only enemy pieces can attack the king
 		if (piece.parity != parity):
-			#print("considering if the ", piece.name, " on ", piece.current_space, " can attack the king on ", kings_space)
 			var legal_set = consult_piece_mobility(piece)
 			
 			for move in legal_set:
 				if (move == kings_space):
+					#print (" the ", piece.name, " on ", piece.current_space, " cant attack the king on ", kings_space)
 					return true
 	return false
 
@@ -378,7 +378,7 @@ func suppose_next_move(old_square: String, new_square: String):
 	
 	# if this position (1 move ahead) is in check
 	if (is_king_in_check(piece.parity)):
-		print("the ", piece.parity, " king is in check after moving to  ", new_square)
+		#print("the ", piece.parity, " king is in check after moving to  ", new_square)
 		update_spaces_dictionary()
 		return false
 	

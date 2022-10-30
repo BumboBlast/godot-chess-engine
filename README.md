@@ -34,18 +34,21 @@ game keeps track of whos turn it is
     [x] piees now keep track of what space they were on before being legally moved
     [] added a score card (keeps track of move order)
     [] make rook movement (during castling) lerp
+    [] make it so you actually have to click the piece
+        [] right now you can click anywhere and hold down LMB until you hover a piece
 
     [x] make sure castling checks for all legality  
         [x] castling checks if a rook is there
         [x] castling checks castling_rights boolean
         [x] castling now checks if a rook or a king has ever moved
+        [x] only consider castling for the correct color
+        [x] cant castle through or out of check
     
     [x]  capturing works
         [x] turns work
         [x] pieces leave board when captured
         [x] captures only opposite color
-        [] only consider castling for the correct color
-        [] cant castle through or out of check
+ 
     ---- 
     right now place_piece (mostly) physically moves the sprite, and is located in baord (called in piece)
     logical_move legally moves the piece , and is located in rules (called in piece)
