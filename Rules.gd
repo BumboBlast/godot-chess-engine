@@ -92,36 +92,28 @@ func update_spaces_dictionary():
 
 
 
-
-# generate and return a FEN for the current board state
-func get_fen():
-	pass
-
-
-# returns true if spaces between a piece and another (typically rook and king) are unoccupied
-# space 1 is kings_space
-"""
-order of the two if -return statements below matter (this is scary)
-"""
-func spaces_between_are_clear(space1: String, space2: String):
+# returns true if the spaces between the param spaces (non inclusive) are empty
+func spaces_between_are_clear(kingspace: String, rookspace: String):
 	
-	# only do this calculation if the two spaces are on the same row
-	if (space1[1] != space2[1]): return false
+	# only consider the cases where king and rook on the same rank
+	if (kingspace[1] != rookspace[1]): return false
 	
-	var file1 = ord(space1[0])
-	var file2 = ord(space2[0])
-	var col = space1[1]
-	var step = -1
-	if ((file1 - file2) < 0): step = 1
+	var kingspace_file = ord(kingspace[0])
+	var rookspace_file = ord(rookspace[0])
+	var spaces_from_king = abs(kingspace_file - rookspace_file)
+	var direction = 1
+	if (kingspace_file > rookspace_file): direction = -1
 	
-	for f in range(file1 + step, file2, step):
-		var check_this_space = char(f) + space1[1]
+	for i in range(1, spaces_from_king):
+		var offset = i * direction
+		var check_this_space = char(ord(kingspace[0]) + offset) + kingspace[1]
 		if (is_occupied(check_this_space)): return false
-		if (!suppose_next_move(space1, check_this_space)): 
-			print ("castling trhough check")
-			return false
+		if (!suppose_next_move(kingspace, check_this_space)): return false
 	
 	return true
+
+
+
 
 
 # returns king's castling target squares to be appended to legal spaces
@@ -136,15 +128,18 @@ func try_castling(piece, current_space):
 	
 	# check the correct color king for castling eligibility
 	for corner in [0, 1, 2, 3]:
-		# if castling is allowed
+		# if castling is legal for this rook
 		if (castling_rights[corner]):
-			# if a rook is in the corner in question
-			if (is_occupied(rook_spaces[corner])):
-				if (is_occupied(rook_spaces[corner]).name.begins_with("Rook")):
-					# if you arent castling through occupied spaces
-					if (spaces_between_are_clear(current_space, rook_spaces[corner])):
-						valid_targets.push_back(castling_targets[corner])
-	
+			# if no pieces between the king and rook, 
+			# also if these spaces arent attacked
+			if (spaces_between_are_clear(current_space, rook_spaces[corner])):
+				valid_targets.push_back(castling_targets[corner])
+		
+		
+		
+		
+		
+	print( "castling targets:", valid_targets)
 	return valid_targets
 
 
@@ -336,6 +331,7 @@ func king_mobility(piece, current_space):
 
 
 # returns true if the (color) king is in check
+# considers the board state at the time of call
 func is_king_in_check(parity: bool):
 	
 	# find where the king in question sits
@@ -350,8 +346,10 @@ func is_king_in_check(parity: bool):
 	for piece in occupied_spaces.values():
 		
 		# only enemy pieces can attack the king
+		# kings cant attack eachother (so dont check if king is attacking)
+		# this also resolves the recussion loop
 		if (piece.parity != parity):
-			var legal_set = consult_piece_mobility(piece)
+			var legal_set = kingless_piece_mobility(piece)
 			
 			for move in legal_set:
 				if (move == kings_space):
@@ -427,13 +425,35 @@ func trim_violate_check_moves(moves: Array, piece):
 	for index in range(moves.size() - 1, -1, -1):
 		var move = moves[index]
 		
-		# if the move in question is illegal
+		# if the move in question is illegal 
 		if (!suppose_next_move(piece.current_space, move)):
 			moves.erase(move)
 	return moves
 	pass
 
 
+
+
+
+
+
+# same as consult_piece_mobility but without checking for king
+func kingless_piece_mobility(piece):
+	var piece_mobility_set = []
+	var current_space = piece.current_space
+	
+	if (piece.name.begins_with("Pawn")):
+		piece_mobility_set = pawn_mobility(piece, current_space)
+	if (piece.name.begins_with("Knight")): 
+		piece_mobility_set = knight_mobility(piece, current_space)
+	if (piece.name.begins_with("Bishop")):
+		piece_mobility_set = bishop_mobility(piece, current_space)
+	if (piece.name.begins_with("Rook")):
+		piece_mobility_set = rook_mobility(piece, current_space)
+	if (piece.name.begins_with("Queen")):
+		piece_mobility_set = queen_mobility(piece, current_space)
+	
+	return piece_mobility_set
 
 
 
@@ -459,7 +479,6 @@ func consult_piece_mobility(piece):
 		piece_mobility_set = king_mobility(piece, current_space)
 	
 	return piece_mobility_set
-	pass
 
 
 

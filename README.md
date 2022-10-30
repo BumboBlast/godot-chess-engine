@@ -166,3 +166,5 @@ debugging:
     [solved] BUG:   1...    H6 H5,
                     2.BH6   G7 G5, (triggers enpassant target)
                     3.G2 G3 G5 G4, crashes
+
+            BUG: getting stack overflow sometimes
