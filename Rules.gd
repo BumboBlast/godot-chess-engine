@@ -133,6 +133,8 @@ func try_castling(piece, current_space):
 						if ("Rook" in corner.name):
 							valid_targets.push_back(castling_targets[index])
 	
+	valid_targets = trim_violate_check_moves(valid_targets, piece)
+	
 	return valid_targets
 
 
