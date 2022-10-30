@@ -81,10 +81,11 @@ game keeps track of whos turn it is
 
         [] check
             [x] checks if king is being attacked
-               [] (sometimes only updates the next turn)
-            [] impossible to put yourself in check
-            [] if in check, can only make moves that escape check
-            
+            [x] impossible to put yourself in check
+            [x] if in check, can only make moves that escape check
+            [] cant castle out of check
+            [] cant castle through check
+
             [] pawn rules
                 [x] move one space
                 [x] move pawn 2 spaces if on second/ seventh rank
@@ -123,12 +124,12 @@ debugging:
 
     Bug: knight moves off board when at Square A1. SOLVED: ranges are [,)
 
-    Bug: white king can castle on blacks side lol
-    Bug: rook doesnt work??? Bishops dont work???
+    -> Bug: white king can castle on blacks side lol
+    [solved] Bug: rook doesnt work??? Bishops dont work???
         SOLUTION: Since the pieces only understand occupied squares after
         a call to update_spaces_dictionary,  Calling update_spaces_dictionary in loadFEN() resolves it. 
     
-    HARD Bug; Sometimes the game will crash when moveing pieces
+    [solved] HARD Bug; Sometimes the game will crash when moveing pieces
         -> sometimes happens after capturing alot
         -> when it happens, it usually is a problem calling "piece.parity (on NULL instance)"
             -> while calling Rook Legality

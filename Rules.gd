@@ -67,7 +67,7 @@ var white_king_space: String
 var black_king_space: String
 
 var white_in_check: bool
-var black_ing_check: bool
+var black_in_check: bool
 
 
 
@@ -97,8 +97,8 @@ func get_fen():
 	pass
 
 
-# returns true if spaces between rook and king are unoccupied
-func spaces_between_rook_and_king_are_clear(space1: String, space2: String):
+# returns true if spaces between a piece and another (typically rook and king) are unoccupied
+func spaces_between_are_clear(space1: String, space2: String):
 
 	var file1 = ord(space1[0])
 	var file2 = ord(space2[0])
@@ -128,7 +128,7 @@ func try_castling(piece, current_space):
 		var corner = is_occupied(rook_spaces[index])
 		if (corner):
 			if (castling_rights[index]):
-				if (spaces_between_rook_and_king_are_clear(rook_spaces[index], current_space)):
+				if (spaces_between_are_clear(rook_spaces[index], current_space)):
 					if ("Rook" in corner.name):
 						valid_targets.push_back(castling_targets[index])
 	
@@ -240,6 +240,7 @@ func bishop_mobility(piece, current_space):
 	return bishop_mobility_set
 
 
+
 func rook_mobility(piece, current_space):
 	var rook_mobility_set = []
 	
@@ -277,12 +278,17 @@ func rook_mobility(piece, current_space):
 	return rook_mobility_set
 
 
+
+
+
 func queen_mobility(piece, current_space):
 	var queen_mobility_set = []
 	# a queen can move anywhere a bishop or a rook could
 	queen_mobility_set += bishop_mobility(piece, current_space)
 	queen_mobility_set += rook_mobility(piece, current_space)
 	return queen_mobility_set
+
+
 
 
 
@@ -309,21 +315,61 @@ func king_mobility(piece, current_space):
 
 
 
-
+# returns true if the (color) king is in check
 func is_king_in_check(parity: bool):
 	
-	var kings_space = white_king_space
-	if (parity): kings_space = black_king_space
+	# find where the king in question sits
+	var kings_space: String
+	for piece in occupied_spaces.values():
+		if (piece.name.begins_with("King")) and (parity == piece.parity):
+			for sp in occupied_spaces.keys():
+				if (occupied_spaces[sp] == piece):
+					kings_space = sp
 	
-	for piece in $Board/AllPieces.get_children():
-		var legal_set = get_legal_spaces(piece)
-		
-		for move in legal_set:
-			if (move == kings_space):
-				return true
+	# if he is being attacked, retur true (yes, he is in check)
+	for piece in occupied_spaces.values():
+		# only enemy pieces can attack the king
+		if (piece.parity != parity):
+			#print("considering if the ", piece.name, " on ", piece.current_space, " can attack the king on ", kings_space)
+			var legal_set = consult_piece_mobility(piece)
+			
+			for move in legal_set:
+				if (move == kings_space):
+					return true
 	return false
 
 
+
+# make a fake boardState to analyze
+# a move is a pair of spaces
+# new move removes the piece on oldsquare and replaces it onto newsquare
+# returns true if next_move is legal
+func suppose_next_move(old_square: String, new_square: String):
+	
+	# make a silly fake board state by making a new occupied_spaces_dictionary
+	# for this instance only. Therefore, call "Update spaces dictionary" at the end
+	# make no changes to the actual pieces in the tree 
+	# so that the update call fixes the spaces dictionary 
+	
+	
+	var piece = is_occupied(old_square)
+	if (!piece):
+		print( "sorry, this move doesnt make sense,:", old_square, " to ", new_square)
+		return false
+	
+	# move the piece (create fake board state, 1 move deep)
+	occupied_spaces.erase(old_square)
+	occupied_spaces[new_square] = piece
+	
+	
+	if (is_king_in_check(piece.parity)):
+		print("the ", piece.parity, " king is in check after moving to  ", new_square)
+		update_spaces_dictionary()
+		return false
+	
+	# restore the current board state
+	update_spaces_dictionary()
+	return true
 
 
 func is_space_offboard(space: String):
@@ -333,10 +379,12 @@ func is_space_offboard(space: String):
 	return false
 
 
+
+
+
+
 # trim off the moves that are illegal or off board (also illegal)
-# also take off moves that dont remove the king from check
-# also take off moves that place the king in check
-func trim_moves(moves: Array, piece):
+func trim_off_board_moves(moves: Array, piece):
 	
 	# trim the off-board moves
 	for index in range(moves.size() - 1, -1, -1):
@@ -345,6 +393,30 @@ func trim_moves(moves: Array, piece):
 			moves.erase(move)
 	return moves
 	pass
+
+
+
+
+
+
+
+func trim_violate_check_moves(moves: Array, piece):
+	
+	# trim the moves that violate check
+	for index in range(moves.size() - 1, -1, -1):
+		var move = moves[index]
+		if (!suppose_next_move(piece.current_space, move)):
+			print( "This move is illegal:", piece.current_space, ", to ", move)
+			moves.erase(move)
+	return moves
+	pass
+
+
+
+
+
+
+
 
 # returns the set of moves that a piece could make
 func consult_piece_mobility(piece):
@@ -447,7 +519,6 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	active_color = (!active_color)
 	
 	
-	
 	# keep current, the record of the board state
 	update_spaces_dictionary()
 	
@@ -456,6 +527,23 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	# (it will eventually be impossible to put yourself in check)
 	if (is_king_in_check(active_color)):
 		print (get_active_color(), " is in check")
+		if (active_color):
+			black_in_check = true
+		else:
+			white_in_check = true
+	else:
+		if (active_color):
+			black_in_check = false
+		else:
+			white_in_check = false
+	
+	print(castling_rights)
+
+
+
+
+var checked_for_check = false
+
 
 
 
@@ -471,10 +559,12 @@ func get_legal_spaces(piece):
 	var piece_mobility = consult_piece_mobility(piece)
 	
 	# trim moves that are off board (very important!!)
-	# trim moves that violate check
-	piece_mobility = trim_moves(piece_mobility, piece)
+	piece_mobility = trim_off_board_moves(piece_mobility, piece)
+	
+	#trim moves that violate check
+	piece_mobility = trim_violate_check_moves(piece_mobility, piece)
 
-	#print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
+	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
 
