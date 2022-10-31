@@ -545,10 +545,11 @@ func capture_pawn_enpassant(piece, new_space):
 func promote_pawn(piece, new_space):
 	for this_piece in $Board/AllPieces.get_children():
 		if (this_piece == piece):
-			this_piece.queue_free()
-			
+			var parity = this_piece.parity
 			var chosen_promotion = yield(get_parent().get_child(1).handle_promote_menu(), "completed")
-			$Board.add_piece(chosen_promotion, "Light", new_space)
+			$Board.add_piece(chosen_promotion, parity, new_space)
+			this_piece.queue_free()
+			update_spaces_dictionary()
 
 
 

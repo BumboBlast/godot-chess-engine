@@ -122,13 +122,12 @@ func increment_name(pieceName: String):
 
 
 # instantiate piece object, store into container
-func instance_piece(name: String, parity: String):
+func instance_piece(name: String, parity: bool):
 	var newPiece = NEWPIECE.instance()
 	newPiece.set_name(increment_name(name))
 	$AllPieces.add_child(newPiece)
 	
-	
-	if (parity == "Dark"):
+	if (parity):
 		newPiece.parity = true
 	else:
 		newPiece.parity = false
@@ -159,7 +158,7 @@ func place_piece(piece, new_space: String):
 
 
 # adds a piece to the board (and to the piece array)
-func add_piece(name: String, parity: String, square: String):
+func add_piece(name: String, parity: bool, square: String):
 	instance_piece(name, parity)
 	place_piece(allPieces.back(), square)
 
@@ -210,22 +209,22 @@ func loadFen(fen: String):
 			var space = String(char(rank + 64)) + String(char(file + 48))
 			
 			# if character is a letter
-			if (ch == 'p'): add_piece("Pawn", "Dark", space)
-			if (ch == 'P'): add_piece("Pawn", "Light", space)
-			if (ch == 'n'): add_piece("Knight", "Dark", space)
-			if (ch == 'N'): add_piece("Knight", "Light", space)
-			if (ch == 'b'): add_piece("Bishop", "Dark", space)
-			if (ch == 'B'): add_piece("Bishop", "Light", space)
-			if (ch == 'r'): add_piece("Rook", "Dark", space)
-			if (ch == 'R'): add_piece("Rook", "Light", space)
+			if (ch == 'p'): add_piece("Pawn", true, space)
+			if (ch == 'P'): add_piece("Pawn", false, space)
+			if (ch == 'n'): add_piece("Knight", true, space)
+			if (ch == 'N'): add_piece("Knight", false, space)
+			if (ch == 'b'): add_piece("Bishop", true, space)
+			if (ch == 'B'): add_piece("Bishop", false, space)
+			if (ch == 'r'): add_piece("Rook", true, space)
+			if (ch == 'R'): add_piece("Rook", false, space)
 			if (ch == 'k'): 
-				add_piece("King", "Dark", space)
+				add_piece("King", true, space)
 				get_parent().black_king_space = space
 			if (ch == 'K'): 
-				add_piece("King", "Light", space)
+				add_piece("King", false, space)
 				get_parent().white_king_space = space
-			if (ch == 'q'): add_piece("Queen", "Dark", space)
-			if (ch == 'Q'): add_piece("Queen", "Light", space)
+			if (ch == 'q'): add_piece("Queen", true, space)
+			if (ch == 'Q'): add_piece("Queen", false, space)
 			
 			# how many spaces between next Piece
 			if (ch.is_valid_integer()):

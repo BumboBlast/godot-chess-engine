@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready():
+	
 	visible = false
 	$VBoxContainer/ConfirmPromotion.disabled = true
 
