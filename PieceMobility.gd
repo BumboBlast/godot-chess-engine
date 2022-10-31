@@ -1,6 +1,4 @@
-extends "res://Castling.gd"
-
-
+extends Node
 
 
 
@@ -79,6 +77,7 @@ func knight_mobility(piece, current_space):
 
 
 
+
 func bishop_mobility(piece, current_space):
 	var bishop_mobility_set = []
 	# calculate all 4 diagonals starting from the bishops space
@@ -145,15 +144,12 @@ func rook_mobility(piece, current_space):
 
 
 
-
-
 func queen_mobility(piece, current_space):
 	var queen_mobility_set = []
 	# a queen can move anywhere a bishop or a rook could
 	queen_mobility_set += bishop_mobility(piece, current_space)
 	queen_mobility_set += rook_mobility(piece, current_space)
 	return queen_mobility_set
-
 
 
 

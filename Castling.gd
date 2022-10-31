@@ -2,14 +2,6 @@ extends "res://Rules.gd"
 # idont think this is necessary
 
 
-
-
-
-
-
-
-
-
 # returns true if the spaces between the param spaces (non inclusive) are empty
 func spaces_between_are_clear(kingspace: String, rookspace: String):
 	
@@ -53,19 +45,15 @@ func try_castling(piece, current_space):
 			if (spaces_between_are_clear(current_space, rook_spaces[corner])):
 				valid_targets.push_back(castling_targets[corner])
 		
-		
-		
-		
-		
 	print( "castling targets:", valid_targets)
 	return valid_targets
-	
-	
-	
-	
-	
-	
-	# this 1. checks if you just castled (legally or no) 2. resolves the rook
+
+
+
+
+
+
+# this 1. checks if you just castled (legally or no) 2. resolves the rook
 func just_castled(piecename: String, old_space: String, new_space: String):
 	
 	var king_moved_spaces = ord(new_space[0]) - ord(old_space[0])

@@ -2,7 +2,6 @@ extends Node
 
 
 
-
 # returns true if the (color) king is in check
 # considers the board state at the time of call
 func is_king_in_check(parity: bool):
@@ -29,6 +28,8 @@ func is_king_in_check(parity: bool):
 					#print (" the ", piece.name, " on ", piece.current_space, " cant attack the king on ", kings_space)
 					return true
 	return false
+
+
 
 
 
@@ -62,7 +63,6 @@ func suppose_next_move(old_square: String, new_square: String):
 	# restore the current board state
 	get_parent().update_spaces_dictionary()
 	return true
-
 
 
 

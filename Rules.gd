@@ -74,6 +74,9 @@ var black_in_check: bool
 
 
 
+
+
+
 # create dictionary of spaces
 # used in this class, and updated frequently, 
 # rather than calling node tree hundreds of times
@@ -95,8 +98,6 @@ func update_spaces_dictionary():
 
 
 
-
-
 # returns the piece if occupied, else returns false if empty
 func is_occupied(space):
 	
@@ -105,16 +106,6 @@ func is_occupied(space):
 			return occupied_spaces[space]
 	
 	return false
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -142,7 +133,6 @@ func trim_off_board_moves(moves: Array, piece):
 			moves.erase(move)
 	return moves
 	pass
-
 
 
 
@@ -215,6 +205,9 @@ func capture_pawn_enpassant(piece, new_space):
 
 
 
+
+
+
 func was_last_move_pawn_promote(piece, new_space):
 	if ("Pawn" in piece.name):
 		var last_rank = '8'
@@ -238,6 +231,7 @@ func promote_pawn(piece, new_space):
 			this_piece.queue_free()
 			update_spaces_dictionary()
 			next_move_ready = true
+
 
 
 
