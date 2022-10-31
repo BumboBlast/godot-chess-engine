@@ -132,28 +132,30 @@ func _on_Piece_input_event(viewport, event, shape_idx):
 	#if clicked
 	if (Input.is_action_pressed("ui_left_mouse")):
 		
-		#only pick up piece of active color
-		if (get_color() == get_parent().get_parent().get_parent().get_active_color()):
+		if (get_parent().get_parent().get_parent().next_move_ready):
 		
-			#if no piece in hand
-			if (get_parent().piece_in_hand == false):
-				
-				# can only hold one piece at once
-				get_parent().set_piece_in_hand(self, true)
-				
-				# after click, want piece's CENTER to SNAP to mouse positon
-				global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
-				
-				# calculate list of spaces legal for the piece to land
-				# rules node
-				legal_spaces = get_parent().get_parent().get_parent().get_legal_spaces(self)
-				
-				# stores the last place the piece was picked up (only stores it once)
-				# only can pick up one piece at a time
-				if (self.selected == false):
+			#only pick up piece of active color
+			if (get_color() == get_parent().get_parent().get_parent().get_active_color()):
+			
+				#if no piece in hand
+				if (get_parent().piece_in_hand == false):
 					
-					# picks up the piece
-					self.selected = true
+					# can only hold one piece at once
+					get_parent().set_piece_in_hand(self, true)
+					
+					# after click, want piece's CENTER to SNAP to mouse positon
+					global_position = get_global_mouse_position() - (self.sprite_rect.size / 2)
+					
+					# calculate list of spaces legal for the piece to land
+					# rules node
+					legal_spaces = get_parent().get_parent().get_parent().get_legal_spaces(self)
+					
+					# stores the last place the piece was picked up (only stores it once)
+					# only can pick up one piece at a time
+					if (self.selected == false):
+						
+						# picks up the piece
+						self.selected = true
 
 
 

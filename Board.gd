@@ -296,6 +296,8 @@ func loadFen(fen: String):
 	if (get_parent().enpassant_target == "-"):
 		get_parent().enpassant_legal = false
 		get_parent().enpassant_target = ""
+	
+	get_parent().next_move_ready = true
 	# update score and spaces dictionary
 	get_parent().update_spaces_dictionary()
 

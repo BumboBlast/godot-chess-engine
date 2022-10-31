@@ -5,6 +5,8 @@ extends Node
 #indicates which side moves next
 var active_color: bool
 
+var next_move_ready: bool
+
 
 func get_active_color():
 	if (active_color):
@@ -540,16 +542,29 @@ func capture_pawn_enpassant(piece, new_space):
 
 
 
+func was_last_move_pawn_promote(piece, new_space):
+	if ("Pawn" in piece.name):
+		var last_rank = '8'
+		if (piece.parity): last_rank = '1'
+		if (new_space[1] == last_rank):
+			return true
+	return false
+
+
+
+
 
 
 func promote_pawn(piece, new_space):
 	for this_piece in $Board/AllPieces.get_children():
 		if (this_piece == piece):
 			var parity = this_piece.parity
+			print( "chosen color is: ", parity)
 			var chosen_promotion = yield(get_parent().get_child(1).handle_promote_menu(), "completed")
 			$Board.add_piece(chosen_promotion, parity, new_space)
 			this_piece.queue_free()
 			update_spaces_dictionary()
+			next_move_ready = true
 
 
 
@@ -557,6 +572,9 @@ func promote_pawn(piece, new_space):
 
 # updates the board state and score with each real, legal move
 func make_logical_move(piece, old_space: String, new_space: String):
+	
+	next_move_ready = false
+	
 	var parity = "White"
 	if (piece.parity): parity = "Black"
 	var last_move = score.back()
@@ -609,15 +627,13 @@ func make_logical_move(piece, old_space: String, new_space: String):
 							enpassant_legal = true
 							enpassant_target = space_before
 							print( "en passant is now legal ", enpassant_target)
-
+	
 	
 	
 	# if pawn is at last rank (promote)
-	if ("Pawn" in piece.name):
-		var last_rank = '8'
-		if (piece.parity): last_rank = '1'
-		if (new_space[1] == last_rank):
-			promote_pawn(piece, new_space)
+	if (was_last_move_pawn_promote(piece, new_space)):
+		promote_pawn(piece, new_space)
+	else: next_move_ready = true
 	
 	# if move resulted in a capture
 	var occupying_piece = is_occupied(new_space)
@@ -650,11 +666,6 @@ func make_logical_move(piece, old_space: String, new_space: String):
 			black_in_check = false
 		else:
 			white_in_check = false
-
-
-
-
-var checked_for_check = false
 
 
 
