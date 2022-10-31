@@ -3,7 +3,7 @@ extends Node
 
 
 func _ready():
-	
+
 	$Rules/Board.set_board_size(0.80)
 	$Rules/Board.set_board_position(0.10, 0.10)
 	

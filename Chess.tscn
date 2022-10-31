@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Chess.gd" type="Script" id=1]
+[ext_resource path="res://Rules.gd" type="Script" id=2]
+[ext_resource path="res://Promote Menu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Board.tscn" type="PackedScene" id=4]
+
+[node name="Chess" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Rules" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Board" parent="Rules" instance=ExtResource( 4 )]
+
+[node name="Promote Menu" parent="." instance=ExtResource( 3 )]
+visible = false

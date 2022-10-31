@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://HBoxContainer.gd" type="Script" id=1]
+
+[node name="Promote Menu" type="Control"]
+margin_right = 994.0
+margin_bottom = 527.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 123.0
+margin_bottom = 58.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="TextureButton" parent="HBoxContainer"]
+margin_right = 27.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+
+[node name="Button2" type="TextureButton" parent="HBoxContainer"]
+margin_left = 31.0
+margin_right = 59.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="TextureButton" parent="HBoxContainer"]
+margin_left = 63.0
+margin_right = 91.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button4" type="TextureButton" parent="HBoxContainer"]
+margin_left = 95.0
+margin_right = 123.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}

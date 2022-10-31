@@ -51,56 +51,28 @@ var previous_space: String
 	Piece methods
 """
 
-func calculate_sprite_location(pieceName: String, spriteLength, spriteHeight):
-
-	if (pieceName.begins_with("Pawn")):
-		if (self.parity):
-			return Vector2(spriteLength * 0, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 0, spriteHeight * 1)
-	if (pieceName.begins_with("King")):
-		if (self.parity):
-			return Vector2(spriteLength * 1, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 1, spriteHeight * 1)
-	if (pieceName.begins_with("Bishop")):
-		if (self.parity):
-			return Vector2(spriteLength * 2, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 2, spriteHeight * 1)
-	if (pieceName.begins_with("Knight")):
-		if (self.parity):
-			return Vector2(spriteLength * 3, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 3, spriteHeight * 1)
-	if (pieceName.begins_with("Rook")):
-		if (self.parity):
-			return Vector2(spriteLength * 4, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 4, spriteHeight * 1)
-	if (pieceName.begins_with("Queen")):
-		if (self.parity):
-			return Vector2(spriteLength * 5, spriteHeight * 0)
-		else:
-			return Vector2(spriteLength * 5, spriteHeight * 1)
-	return Vector2(spriteLength * 0, spriteHeight * 0) # default value
 
 
 
 
 
-func find_spriteSheet_rect(pieceName: String, texSize: Vector2):
+
+func find_spritepath(pieceName: String):
+
+	if (parity):
+		if (pieceName.begins_with("Pawn")): return "res://art/debug_pawn_black.png"
+		if (pieceName.begins_with("Knight")): return "res://art/debug_knight_black.png"
+		if (pieceName.begins_with("Bishop")): return "res://art/debug_bishop_black.png"
+		if (pieceName.begins_with("Rook")): return "res://art/debug_rook_black.png"
+		if (pieceName.begins_with("King")): return "res://art/debug_king_black.png"
+		if (pieceName.begins_with("Queen")): return "res://art/debug_queen_black.png"
+	if (pieceName.begins_with("Pawn")): return "res://art/debug_pawn_white.png"
+	if (pieceName.begins_with("Knight")): return "res://art/debug_knight_white.png"
+	if (pieceName.begins_with("Bishop")): return "res://art/debug_bishop_white.png"
+	if (pieceName.begins_with("Rook")): return "res://art/debug_rook_white.png"
+	if (pieceName.begins_with("King")): return "res://art/debug_king_white.png"
+	if (pieceName.begins_with("Queen")): return "res://art/debug_queen_white.png"
 	
-	# 6 unique pieces, 2 colors (6 x 2 pieces)
-	var spriteLength = texSize[0] / 6#pixels
-	var spriteHeight = texSize[1] / 2#pixels
-	
-	# where on the spritesheet the tex is
-	var spriteSheetRect = Rect2(
-		calculate_sprite_location(pieceName, spriteLength, spriteHeight),
-		Vector2(spriteLength, spriteHeight)
-	)
-	return spriteSheetRect
 
 
 
@@ -122,16 +94,10 @@ func update_piece_sprite_rect():
 
 
 func loadTexture():
-	var tex = load("res://art/debugPiecesSpriteSheet1.png")
 	
-	# rect defining where on the spritesheet the piece is located
-	var spriteSheetRect = find_spriteSheet_rect(self.name, tex.get_size())
+	var spritepath = find_spritepath(self.name)
 	
-	$PieceSprite.texture = tex
-	$PieceSprite.set_region(true)
-	$PieceSprite.set_region_rect(spriteSheetRect)
-	$PieceSprite.visible = true
-	
+	$PieceSprite.texture = load(spritepath)
 	#board scale
 	var new_scale = get_parent().get_parent().get_scale()
 	
