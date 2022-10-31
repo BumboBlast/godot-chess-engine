@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Chess.gd" type="Script" id=1]
 [ext_resource path="res://Rules.gd" type="Script" id=2]
 [ext_resource path="res://Promote Menu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Board.tscn" type="PackedScene" id=4]
+[ext_resource path="res://PieceMobility.gd" type="Script" id=5]
+[ext_resource path="res://Castling.gd" type="Script" id=6]
+[ext_resource path="res://Check.gd" type="Script" id=7]
 
 [node name="Chess" type="Node"]
 script = ExtResource( 1 )
@@ -13,6 +16,15 @@ script = ExtResource( 2 )
 
 [node name="Board" parent="Rules" instance=ExtResource( 4 )]
 position = Vector2( 1364.83, 357.598 )
+
+[node name="PieceMobility" type="Node" parent="Rules"]
+script = ExtResource( 5 )
+
+[node name="Castling" type="Node" parent="Rules"]
+script = ExtResource( 6 )
+
+[node name="Check" type="Node" parent="Rules"]
+script = ExtResource( 7 )
 
 [node name="Promote Menu" parent="." instance=ExtResource( 3 )]
 margin_left = 1368.0
