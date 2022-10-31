@@ -12,6 +12,10 @@ script = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Board" parent="Rules" instance=ExtResource( 4 )]
+position = Vector2( 1364.83, 357.598 )
 
 [node name="Promote Menu" parent="." instance=ExtResource( 3 )]
-visible = false
+margin_left = 1368.0
+margin_top = 583.0
+margin_right = 1580.0
+margin_bottom = 702.0

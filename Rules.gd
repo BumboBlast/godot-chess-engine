@@ -539,6 +539,21 @@ func capture_pawn_enpassant(piece, new_space):
 		print( "error finding that pawn")
 
 
+
+
+
+func promote_pawn(piece, new_space):
+	for this_piece in $Board/AllPieces.get_children():
+		if (this_piece == piece):
+			this_piece.queue_free()
+			
+			var chosen_promotion = yield(get_parent().get_child(1).handle_promote_menu(), "completed")
+			$Board.add_piece(chosen_promotion, "Light", new_space)
+
+
+
+
+
 # updates the board state and score with each real, legal move
 func make_logical_move(piece, old_space: String, new_space: String):
 	var parity = "White"
@@ -601,14 +616,7 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		var last_rank = '8'
 		if (piece.parity): last_rank = '1'
 		if (new_space[1] == last_rank):
-			print(" promote")
-			#promote
-			for this_piece in $Board/AllPieces.get_children():
-				if (this_piece == piece):
-					this_piece.queue_free()
-					$Board.add_piece("Queen", "Light", new_space)
-					break
-			
+			promote_pawn(piece, new_space)
 	
 	# if move resulted in a capture
 	var occupying_piece = is_occupied(new_space)
