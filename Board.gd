@@ -112,7 +112,7 @@ func increment_name(pieceName: String):
 	var increment = 1
 	
 	for p in $AllPieces.get_children():
-		if (p.name.begins_with(pieceName)):
+		if (pieceName in p.name):
 			increment = increment + 1
 	
 	return pieceName + String(increment)
@@ -123,17 +123,17 @@ func increment_name(pieceName: String):
 
 # instantiate piece object, store into container
 func instance_piece(name: String, parity: bool):
-	var newPiece = NEWPIECE.instance()
-	newPiece.set_name(increment_name(name))
-	$AllPieces.add_child(newPiece)
+	var new_piece = NEWPIECE.instance()
+	new_piece.set_name(increment_name(name))
+	$AllPieces.add_child(new_piece)
 	
 	if (parity):
-		newPiece.parity = true
+		new_piece.parity = true
 	else:
-		newPiece.parity = false
+		new_piece.parity = false
 	
-	newPiece.loadTexture()
-	allPieces.append(newPiece)
+	new_piece.loadTexture()
+	return new_piece
 
 
 
@@ -159,8 +159,8 @@ func place_piece(piece, new_space: String):
 
 # adds a piece to the board (and to the piece array)
 func add_piece(name: String, parity: bool, square: String):
-	instance_piece(name, parity)
-	place_piece(allPieces.back(), square)
+	var newpiece = instance_piece(name, parity)
+	place_piece(newpiece, square)
 
 
 
@@ -170,13 +170,7 @@ func add_piece(name: String, parity: bool, square: String):
 # free all piece nodes from memory
 func wipeBoard():
 	for p in $AllPieces.get_children():
-		
-		for _index in range(0, self.allPieces.size()):
-			if (p == allPieces[_index]):
-				allPieces.remove(_index)
-				break
-		
-		p.queue_free()
+		p.free()
 
 
 

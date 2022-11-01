@@ -61,7 +61,7 @@ func find_spritepath(pieceName: String):
 	
 	if (parity):
 		if ("Pawn" in pieceName): return "res://art/chess/debug_pawn_black.png"
-		if ("Knight" in pieceName): return "res://art/chess/debug_king_black.png"
+		if ("Knight" in pieceName): return "res://art/chess/debug_knight_black.png"
 		if ("Bishop" in pieceName): return "res://art/chess/debug_bishop_black.png"
 		if ("Rook" in pieceName): return "res://art/chess/debug_rook_black.png"
 		if ("King" in pieceName): return "res://art/chess/debug_king_black.png"
