@@ -354,7 +354,7 @@ func get_legal_spaces(piece):
 	#trim moves that violate check
 	piece_mobility = trim_violate_check_moves(piece_mobility, piece)
 
-	print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
+	#print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
 
 

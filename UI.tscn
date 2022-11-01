@@ -70,3 +70,4 @@ size_flags_vertical = 3
 text = "Version 0"
 
 [connection signal="pressed" from="HBoxContainer/Main Menu/Menu Options/New Game" to="." method="_on_New_Game_pressed"]
+[connection signal="pressed" from="HBoxContainer/Main Menu/Menu Options/Something" to="." method="_on_Something_pressed"]

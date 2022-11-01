@@ -45,7 +45,7 @@ func try_castling(piece, current_space):
 			if (spaces_between_are_clear(current_space, rook_spaces[corner])):
 				valid_targets.push_back(castling_targets[corner])
 		
-	print( "castling targets:", valid_targets)
+	#print( "castling targets:", valid_targets)
 	return valid_targets
 
 
