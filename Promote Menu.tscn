@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Promote Menu.gd" type="Script" id=1]
-[ext_resource path="res://art/debug_queen_black.png" type="Texture" id=2]
-[ext_resource path="res://art/debug_bishop_black.png" type="Texture" id=3]
-[ext_resource path="res://art/debug_knight_black.png" type="Texture" id=4]
-[ext_resource path="res://art/debug_rook_black.png" type="Texture" id=5]
-[ext_resource path="res://art/debug_confirm_promotion.png" type="Texture" id=6]
+[ext_resource path="res://art/chess/debug_queen_black.png" type="Texture" id=2]
+[ext_resource path="res://art/chess/debug_bishop_black.png" type="Texture" id=3]
+[ext_resource path="res://art/chess/debug_knight_black.png" type="Texture" id=4]
+[ext_resource path="res://art/chess/debug_rook_black.png" type="Texture" id=5]
+[ext_resource path="res://art/chess/debug_confirm_promotion.png" type="Texture" id=6]
 
 [node name="Promote Menu" type="Control"]
 margin_left = 321.0

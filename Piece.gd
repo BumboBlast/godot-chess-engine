@@ -60,18 +60,18 @@ var previous_space: String
 func find_spritepath(pieceName: String):
 	
 	if (parity):
-		if ("Pawn" in pieceName): return "res://art/debug_pawn_black.png"
-		if ("Knight" in pieceName): return "res://art/debug_knight_black.png"
-		if ("Bishop" in pieceName): return "res://art/debug_bishop_black.png"
-		if ("Rook" in pieceName): return "res://art/debug_rook_black.png"
-		if ("King" in pieceName): return "res://art/debug_king_black.png"
-		if ("Queen" in pieceName): return "res://art/debug_queen_black.png"
-	if ("Pawn" in pieceName): return "res://art/debug_pawn_white.png"
-	if ("Knight" in pieceName): return "res://art/debug_knight_white.png"
-	if ("Bishop" in pieceName): return "res://art/debug_bishop_white.png"
-	if ("Rook" in pieceName): return "res://art/debug_rook_white.png"
-	if ("King" in pieceName): return "res://art/debug_king_white.png"
-	if ("Queen" in pieceName): return "res://art/debug_queen_white.png"
+		if ("Pawn" in pieceName): return "res://art/chess/debug_pawn_black.png"
+		if ("Knight" in pieceName): return "res://art/chess/debug_king_black.png"
+		if ("Bishop" in pieceName): return "res://art/chess/debug_bishop_black.png"
+		if ("Rook" in pieceName): return "res://art/chess/debug_rook_black.png"
+		if ("King" in pieceName): return "res://art/chess/debug_king_black.png"
+		if ("Queen" in pieceName): return "res://art/chess/debug_queen_black.png"
+	if ("Pawn" in pieceName): return "res://art/chess/debug_pawn_white.png"
+	if ("Knight" in pieceName): return "res://art/chess/debug_knight_white.png"
+	if ("Bishop" in pieceName): return "res://art/chess/debug_bishop_white.png"
+	if ("Rook" in pieceName): return "res://art/chess/debug_rook_white.png"
+	if ("King" in pieceName): return "res://art/chess/debug_king_white.png"
+	if ("Queen" in pieceName): return "res://art/chess/debug_queen_white.png"
 
 
 

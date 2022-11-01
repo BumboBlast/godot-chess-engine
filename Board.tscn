@@ -2,7 +2,7 @@
 
 [ext_resource path="res://AllPieces.gd" type="Script" id=1]
 [ext_resource path="res://Piece.tscn" type="PackedScene" id=2]
-[ext_resource path="res://art/boardPinkMaroonNOBORDERS.png" type="Texture" id=3]
+[ext_resource path="res://art/chess/boardPinkMaroonNOBORDERS.png" type="Texture" id=3]
 [ext_resource path="res://Board.gd" type="Script" id=5]
 
 [node name="Board" type="Sprite"]
