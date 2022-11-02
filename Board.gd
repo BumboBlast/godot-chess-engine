@@ -298,6 +298,23 @@ func loadFen(fen: String):
 
 
 
+
+# return false if FEN is obviously erroneous
+func is_legal_fen(text_fen: String):
+	"""
+	longest FEN is 64 spaces, 7 slashes, 6 or 7 spaces, 4 chars for castling
+	2 chars for enpassant target, 4 digits for the halfmove, 4 digits for the full move
+	(5,870 possible moves according to https://www.chess.com/blog/kurtgodden/the-longest-possible-chess-game)
+	"""
+	if (text_fen.length() > 92): return false
+	
+	# all FENs need 7 slashes to be legal
+	if (text_fen.count('/') != 7): return false
+	
+	return true
+
+
+
 func _ready():
 	
 	pass

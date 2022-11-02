@@ -37,3 +37,16 @@ func _on_Menu_choose_cpu_move():
 	
 	#for move in board_moves:
 		#print (move[0].name,": ", move[0].current_space, " - ", move[1])
+
+
+
+
+
+func _on_Menu_choose_load_fen():
+	var text_fen = $Menu/VBoxContainer/FENLabel.text
+	
+	if (!$Chess/Rules/Board.is_legal_fen(text_fen)):
+		# probably should put error code somwhere else lol
+		$Menu/VBoxContainer/FENLabel.text = "Error loading FEN"
+	else:
+		$Chess/Rules/Board.loadFen(text_fen)
