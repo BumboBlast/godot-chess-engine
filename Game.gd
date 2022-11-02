@@ -1,6 +1,6 @@
 extends Node
 
-
+var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -23,11 +23,11 @@ func _ready():
 	"""
 	$Chess/Rules/Board.set_board_size(0.80)
 	$Chess/Rules/Board.set_board_position(0.10, 0.10)
-	$Chess/Rules/Board.loadFen("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8")
+	$Chess/Rules/Board.loadFen(START_FEN)
 
 
 func _on_Menu_choose_new_game():
-	$Chess/Rules/Board.loadFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+	$Chess/Rules/Board.loadFen(START_FEN)
 
 
 func _on_Menu_choose_cpu_move():
