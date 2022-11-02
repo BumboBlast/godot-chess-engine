@@ -226,7 +226,7 @@ func promote_pawn(piece, new_space):
 		if (this_piece == piece):
 			var parity = this_piece.parity
 			print( "chosen color is: ", parity)
-			var chosen_promotion = yield(get_parent().get_child(1).handle_promote_menu(), "completed")
+			var chosen_promotion = yield(get_parent().get_node("Promote Menu").handle_promote_menu(), "completed")
 			$Board.add_piece(chosen_promotion, parity, new_space)
 			this_piece.queue_free()
 			update_spaces_dictionary()

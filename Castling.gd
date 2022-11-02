@@ -18,7 +18,7 @@ func spaces_between_are_clear(kingspace: String, rookspace: String):
 		var offset = i * direction
 		var check_this_space = char(ord(kingspace[0]) + offset) + kingspace[1]
 		if (get_parent().is_occupied(check_this_space)): return false
-		if (!get_parent().suppose_next_move(kingspace, check_this_space)): return false
+		if (!get_parent().get_node("Check").suppose_next_move(kingspace, check_this_space)): return false
 	
 	return true
 

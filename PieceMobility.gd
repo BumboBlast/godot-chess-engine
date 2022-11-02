@@ -8,11 +8,13 @@ func pawn_mobility(piece, current_space):
 	
 	var pawn_mobility_set = []
 	var direction = 1
-	var second_seventh_rank = 2
+	var start_rank = '2'
+	var last_rank = '8'
 	
-	if (piece.parity): 
+	if (piece.parity):
 		direction = -1
-		second_seventh_rank = '7'
+		start_rank = '7'
+		last_rank = '1'
 	
 	# concern the movement squares
 	var space_ahead = current_space[0] + (char(ord(current_space[1]) + (1 * direction)))
@@ -35,7 +37,7 @@ func pawn_mobility(piece, current_space):
 		
 		#  pawns can move twice instead of once, if on the seventh(second) rank
 		#  pawn can only move twice if it could also move once (so this check is inside moveonce check)
-		if (current_space.ends_with(second_seventh_rank)):
+		if (current_space.ends_with(start_rank)):
 			if (!get_parent().is_occupied(two_spaces_ahead)):
 				pawn_mobility_set.push_back(two_spaces_ahead)
 	
@@ -50,7 +52,18 @@ func pawn_mobility(piece, current_space):
 	# if can enpassant:
 	if (get_parent().enpassant_legal):
 		pawn_mobility_set.push_back(get_parent().enpassant_target)
-
+	
+	
+	# if pawn could promote:
+	for move in pawn_mobility_set:
+		if last_rank in move:
+			
+			# add 3 more possiblites (of promotion)
+			pawn_mobility_set.push_back(move)
+			pawn_mobility_set.push_back(move)
+			pawn_mobility_set.push_back(move)
+			break # this break prevents infinite loops!
+	
 	return pawn_mobility_set
 
 

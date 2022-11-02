@@ -12,7 +12,7 @@ func _ready():
 
 func get_list_of_legal_moves():
 	
-	var parity = true
+	var parity = get_parent().get_node("Rules").active_color
 	
 	# piece, string
 	var board_moves = []
