@@ -8,11 +8,15 @@ func is_king_in_check(parity: bool):
 	
 	# find where the king in question sits
 	var kings_space: String
+	var other_kings_space: String
 	for piece in get_parent().occupied_spaces.values():
-		if (piece.name.begins_with("King")) and (parity == piece.parity):
+		if ("King" in piece.name):
 			for sp in get_parent().occupied_spaces.keys():
 				if (get_parent().occupied_spaces[sp] == piece):
-					kings_space = sp
+					if (parity == piece.parity):
+						kings_space = sp
+					if (parity != piece.parity):
+						other_kings_space = sp
 	
 	# if he is being attacked, retur true (yes, he is in check)
 	for piece in get_parent().occupied_spaces.values():
@@ -25,8 +29,26 @@ func is_king_in_check(parity: bool):
 			
 			for move in legal_set:
 				if (move == kings_space):
-					#print (" the ", piece.name, " on ", piece.current_space, " cant attack the king on ", kings_space)
+					#print (" the ", piece.name, " on ", piece.current_space, " can attack the king on ", kings_space)
 					return true
+	
+	var other_kings_surrounding_files = [
+		char(ord(other_kings_space[0])),
+		char(ord(other_kings_space[0]) + 1),
+		char(ord(other_kings_space[0]) - 1)
+	]
+	
+	var other_kings_surrounding_ranks = [
+		char(ord(other_kings_space[1])),
+		char(ord(other_kings_space[1]) + 1),
+		char(ord(other_kings_space[1]) - 1)
+	]
+	
+	# if king is moving into another king's territory
+	if (kings_space[0] in other_kings_surrounding_files):
+		if (kings_space[1] in other_kings_surrounding_ranks):
+			return true
+	
 	return false
 
 
