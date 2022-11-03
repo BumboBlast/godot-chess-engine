@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Chess.gd" type="Script" id=1]
-[ext_resource path="res://Rules.gd" type="Script" id=2]
-[ext_resource path="res://Promote Menu.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Board.tscn" type="PackedScene" id=4]
-[ext_resource path="res://PieceMobility.gd" type="Script" id=5]
-[ext_resource path="res://Castling.gd" type="Script" id=6]
-[ext_resource path="res://Check.gd" type="Script" id=7]
-[ext_resource path="res://Engine.gd" type="Script" id=8]
+[ext_resource path="res://src/Chess/Chess.gd" type="Script" id=1]
+[ext_resource path="res://src/Chess/Rules.gd" type="Script" id=2]
+[ext_resource path="res://src/Chess/Promote Menu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/Chess/Board.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/Chess/PieceMobility.gd" type="Script" id=5]
+[ext_resource path="res://src/Chess/Castling.gd" type="Script" id=6]
+[ext_resource path="res://src/Chess/Check.gd" type="Script" id=7]
+[ext_resource path="res://src/Chess/Engine.gd" type="Script" id=8]
 
 [node name="Chess" type="Node"]
 script = ExtResource( 1 )

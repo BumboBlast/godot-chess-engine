@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Promote Menu.gd" type="Script" id=1]
+[ext_resource path="res://src/Chess/Promote Menu.gd" type="Script" id=1]
 [ext_resource path="res://art/chess/debug_queen_black.png" type="Texture" id=2]
 [ext_resource path="res://art/chess/debug_bishop_black.png" type="Texture" id=3]
 [ext_resource path="res://art/chess/debug_knight_black.png" type="Texture" id=4]

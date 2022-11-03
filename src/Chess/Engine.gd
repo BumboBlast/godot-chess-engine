@@ -1,4 +1,4 @@
-extends "res://Rules.gd"
+extends "res://src/Chess/Rules.gd"
 
 
 

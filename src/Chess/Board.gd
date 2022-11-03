@@ -18,7 +18,7 @@ onready var spriteRect = Rect2(
 )
 
 # piece object to instantiate dynamically
-const NEWPIECE = preload("res://Piece.tscn")
+const NEWPIECE = preload("res://src/Chess/Piece.tscn")
 
 # stores all the piece objects to iterate over
 var allPieces = []
