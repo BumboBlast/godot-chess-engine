@@ -102,10 +102,8 @@ func loadTexture():
 	var board_square_px = get_parent().get_parent().texture.get_size()[0] / 8
 	var piece_px = $PieceSprite.texture.get_size()[0]
 	
-	print(board_scale, ", ", board_square_px, ", ", piece_px)
-	
 	var new_scale = (board_scale * board_square_px ) / (piece_px )
-	print( piece_px * new_scale)
+
 	self.set_scale(new_scale)
 	update_piece_sprite_rect()
 

@@ -4,7 +4,11 @@ Current CPU Capabilities:
 
     Can make random moves
 
-BUG: CPU Moves do not handle pawn promotions (at all)
+BUGS:
+
+    CPU only promotes their pawn into Queen
+    Get FEN does not do anything
+    CPU will not move if is in check, and only 1 legal move
 
 Credit:
     Font: https://fontesk.com/naga-font/

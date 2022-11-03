@@ -35,7 +35,10 @@ func get_cpu_move():
 
 
 
-
+func calculate_CPU_chosen_promotion():
+	# this function is completeing too fast
+	yield(get_tree().create_timer(0.001), "timeout")
+	return "Queen"
 
 
 
@@ -46,6 +49,9 @@ engines
 func get_random_move():
 	var legal_moves = get_list_of_legal_moves()
 	if (legal_moves.size() > 1):
+		
+		# if can promote a pawn, promote to a random piece
+		
 		var rng = RandomNumberGenerator.new()
 		rng.randomize()
 		var random_variable = rng.randi_range(0, legal_moves.size() - 1)

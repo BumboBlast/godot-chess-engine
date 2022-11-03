@@ -221,12 +221,15 @@ func was_last_move_pawn_promote(piece, new_space):
 
 
 
-func promote_pawn(piece, new_space):
+func promote_pawn(piece, new_space, cpu_move: bool):
 	for this_piece in $Board/AllPieces.get_children():
 		if (this_piece == piece):
 			var parity = this_piece.parity
-			print( "chosen color is: ", parity)
-			var chosen_promotion = yield(get_parent().get_node("Promote Menu").handle_promote_menu(), "completed")
+			var chosen_promotion: String
+			if (!cpu_move):
+				chosen_promotion = yield(get_parent().get_node("Promote Menu").handle_promote_menu(), "completed")
+			else:
+				chosen_promotion = yield(get_parent().get_node("Engine").calculate_CPU_chosen_promotion(), "completed")
 			$Board.add_piece(chosen_promotion, parity, new_space)
 			this_piece.queue_free()
 			update_spaces_dictionary()
@@ -237,17 +240,8 @@ func promote_pawn(piece, new_space):
 
 
 
-# updates the board state and score with each real, legal move
-func make_logical_move(piece, old_space: String, new_space: String):
-	
-	next_move_ready = false
-	
-	var parity = "White"
-	if (piece.parity): parity = "Black"
-	var last_move = score.back()
-	score.push_back([parity + piece.name, old_space, new_space])
-	
-	# if castled, move the rook and then disable castling for that color
+# if castled, move the rook and then disable castling for that color
+func process_logical_castling(piece, old_space: String, new_space: String):
 	if ("King" in piece.name):
 		var just_castled = $Castling.just_castled(piece.name, old_space, new_space)
 		if (just_castled):
@@ -267,9 +261,13 @@ func make_logical_move(piece, old_space: String, new_space: String):
 		if (old_space == "A8"): castling_rights[1] = false
 		if (old_space == "H1"): castling_rights[2] = false
 		if (old_space == "A1"): castling_rights[3] = false
-	
-	
-	# if this move was an enpassant:
+
+
+
+
+
+func process_logical_enpassant(piece, old_space: String, new_space: String):
+# if this move was an enpassant:
 	if (enpassant_legal):
 		if (last_move_was_enpassant(piece, new_space)):
 			# capture the pawn in question
@@ -294,12 +292,27 @@ func make_logical_move(piece, old_space: String, new_space: String):
 							enpassant_legal = true
 							enpassant_target = space_before
 							print( "en passant is now legal ", enpassant_target)
+
+
+var cpu_move = false
+
+# updates the board state and score with each real, legal move
+func make_logical_move(piece, old_space: String, new_space: String):
 	
+	next_move_ready = false
 	
+	var parity = "White"
+	if (piece.parity): parity = "Black"
+	var last_move = score.back()
+	score.push_back([parity + piece.name, old_space, new_space])
+	
+	process_logical_castling(piece, old_space, new_space)
+	
+	process_logical_enpassant(piece, old_space, new_space)
 	
 	# if pawn is at last rank (promote)
 	if (was_last_move_pawn_promote(piece, new_space)):
-		promote_pawn(piece, new_space)
+		promote_pawn(piece, new_space, cpu_move)
 	else: next_move_ready = true
 	
 	# if move resulted in a capture
@@ -314,7 +327,6 @@ func make_logical_move(piece, old_space: String, new_space: String):
 	
 	# change active color (your turn!)
 	active_color = (!active_color)
-	
 	
 	# keep current, the record of the board state
 	update_spaces_dictionary()
@@ -356,6 +368,18 @@ func get_legal_spaces(piece):
 
 	#print ("LEGAL MOVES FOR ", piece.name, ": ", piece_mobility)
 	return piece_mobility
+
+
+
+
+
+func make_CPU_move(cpu_piece, cpu_old_space: String, cpu_new_space: String):
+	cpu_move = true
+	$Board.place_piece(cpu_piece, cpu_new_space)
+	make_logical_move(cpu_piece, cpu_old_space, cpu_new_space)
+	cpu_move = false
+
+
 
 
 

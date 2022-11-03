@@ -39,8 +39,7 @@ func _on_Menu_choose_cpu_move():
 	var cpu_piece = cpu_turn[0]
 	var cpu_old_space = cpu_piece.current_space
 	var cpu_new_space = cpu_turn[1]
-	$Chess/Rules/Board.place_piece(cpu_piece, cpu_new_space)
-	$Chess/Rules.make_logical_move(cpu_piece, cpu_old_space, cpu_new_space)
+	$Chess/Rules.make_CPU_move(cpu_piece, cpu_old_space, cpu_new_space)
 	
 	
 	#for move in board_moves:
