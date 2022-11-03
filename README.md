@@ -1,6 +1,4 @@
-# godot chess engine
-
--> Its a chess game! It works!
+# Its a chess game! It works!
 
 Current CPU Capabilities:
 
