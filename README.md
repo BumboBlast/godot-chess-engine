@@ -5,6 +5,7 @@ Current CPU Capabilities:
     Can make random moves
 
 BUG: CPU Moves do not handle pawn promotions (at all)
+BUG: Get FEN does not do anything 
 
 Credit:
 
