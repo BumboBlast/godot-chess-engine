@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://art/chess/debugPiecesSpriteSheet1.png" type="Texture" id=1]
+[ext_resource path="res://art/chess/pixel art pieces 1/knight1.png" type="Texture" id=1]
 [ext_resource path="res://src/Chess/Piece.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3.45268, 3.49113 )
+extents = Vector2( 20.3604, 21.2295 )
 
 [node name="Piece" type="Area2D"]
 scale = Vector2( 50, 50 )
@@ -13,11 +13,9 @@ script = ExtResource( 2 )
 [node name="PieceSprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 centered = false
-region_enabled = true
-region_rect = Rect2( 0, 0, 7, 7 )
 
 [node name="PieceCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 3.49728, 3.44389 )
+position = Vector2( 21, 21 )
 z_as_relative = false
 shape = SubResource( 1 )
 

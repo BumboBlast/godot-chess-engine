@@ -60,18 +60,18 @@ var previous_space: String
 func find_spritepath(pieceName: String):
 	
 	if (parity):
-		if ("Pawn" in pieceName): return "res://art/chess/debug_pawn_black.png"
-		if ("Knight" in pieceName): return "res://art/chess/debug_knight_black.png"
-		if ("Bishop" in pieceName): return "res://art/chess/debug_bishop_black.png"
-		if ("Rook" in pieceName): return "res://art/chess/debug_rook_black.png"
-		if ("King" in pieceName): return "res://art/chess/debug_king_black.png"
-		if ("Queen" in pieceName): return "res://art/chess/debug_queen_black.png"
-	if ("Pawn" in pieceName): return "res://art/chess/debug_pawn_white.png"
-	if ("Knight" in pieceName): return "res://art/chess/debug_knight_white.png"
-	if ("Bishop" in pieceName): return "res://art/chess/debug_bishop_white.png"
-	if ("Rook" in pieceName): return "res://art/chess/debug_rook_white.png"
-	if ("King" in pieceName): return "res://art/chess/debug_king_white.png"
-	if ("Queen" in pieceName): return "res://art/chess/debug_queen_white.png"
+		if ("Pawn" in pieceName): return "res://art/chess/pixel art pieces 1/pawn1.png"
+		if ("Knight" in pieceName): return "res://art/chess/pixel art pieces 1/knight1.png"
+		if ("Bishop" in pieceName): return "res://art/chess/pixel art pieces 1/bishop1.png"
+		if ("Rook" in pieceName): return "res://art/chess/pixel art pieces 1/rook1.png"
+		if ("King" in pieceName): return "res://art/chess/pixel art pieces 1/king1.png"
+		if ("Queen" in pieceName): return "res://art/chess/pixel art pieces 1/queen1.png"
+	if ("Pawn" in pieceName): return "res://art/chess/pixel art pieces 1/pawn.png"
+	if ("Knight" in pieceName): return "res://art/chess/pixel art pieces 1/knight.png"
+	if ("Bishop" in pieceName): return "res://art/chess/pixel art pieces 1/bishop.png"
+	if ("Rook" in pieceName): return "res://art/chess/pixel art pieces 1/rook.png"
+	if ("King" in pieceName): return "res://art/chess/pixel art pieces 1/king.png"
+	if ("Queen" in pieceName): return "res://art/chess/pixel art pieces 1/queen.png"
 
 
 
@@ -84,7 +84,7 @@ func find_spritepath(pieceName: String):
 func update_piece_sprite_rect():
 	self.sprite_rect = Rect2(
 		self.get_position(),
-		$PieceSprite.get_region_rect().size * self.get_scale()
+		$PieceSprite.texture.get_size() * self.get_scale()
 	)
 	# node and sprite should share same coords (weird)
 
@@ -99,13 +99,13 @@ func loadTexture():
 	$PieceSprite.texture = load(spritepath)
 	#board scale
 	var board_scale = get_parent().get_parent().get_scale()
-	var board_px = get_parent().get_parent().texture.get_size()[0]
+	var board_square_px = get_parent().get_parent().texture.get_size()[0] / 8
 	var piece_px = $PieceSprite.texture.get_size()[0]
 	
-	print(board_scale, ", ", board_px, ", ", piece_px)
+	print(board_scale, ", ", board_square_px, ", ", piece_px)
 	
-	var new_scale = (board_scale * board_px / 8 ) / (piece_px )
-	print( new_scale)
+	var new_scale = (board_scale * board_square_px ) / (piece_px )
+	print( piece_px * new_scale)
 	self.set_scale(new_scale)
 	update_piece_sprite_rect()
 

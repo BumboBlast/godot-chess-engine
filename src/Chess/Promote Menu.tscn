@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/Chess/Promote Menu.gd" type="Script" id=1]
-[ext_resource path="res://art/chess/debug_queen_black.png" type="Texture" id=2]
-[ext_resource path="res://art/chess/debug_bishop_black.png" type="Texture" id=3]
-[ext_resource path="res://art/chess/debug_knight_black.png" type="Texture" id=4]
-[ext_resource path="res://art/chess/debug_rook_black.png" type="Texture" id=5]
+[ext_resource path="res://art/chess/pixel art pieces 1/queen1.png" type="Texture" id=2]
+[ext_resource path="res://art/chess/pixel art pieces 1/knight1.png" type="Texture" id=3]
+[ext_resource path="res://art/chess/pixel art pieces 1/bishop1.png" type="Texture" id=4]
+[ext_resource path="res://art/chess/pixel art pieces 1/rook1.png" type="Texture" id=5]
 [ext_resource path="res://art/chess/debug_confirm_promotion.png" type="Texture" id=6]
 
 [node name="Promote Menu" type="Control"]
@@ -48,7 +48,7 @@ margin_left = 78.0
 margin_right = 152.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
-texture_normal = ExtResource( 3 )
+texture_normal = ExtResource( 4 )
 expand = true
 stretch_mode = 4
 __meta__ = {
@@ -72,7 +72,7 @@ margin_left = 234.0
 margin_right = 309.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
-texture_normal = ExtResource( 4 )
+texture_normal = ExtResource( 3 )
 expand = true
 stretch_mode = 4
 __meta__ = {
