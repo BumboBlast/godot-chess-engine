@@ -7,5 +7,6 @@ Current CPU Capabilities:
 BUG: CPU Moves do not handle pawn promotions (at all)
 
 Credit:
+
     Font: https://fontesk.com/naga-font/
     Piece Art: https://opengameart.org/content/pixel-chess-pieces
