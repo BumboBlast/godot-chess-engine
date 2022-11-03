@@ -25,3 +25,30 @@ func get_list_of_legal_moves():
 				board_moves.push_back([piece, piece_move])
 	
 	return board_moves
+
+
+func get_cpu_move():
+	
+	var cpu_move = get_random_move()
+	return cpu_move
+
+
+
+
+
+
+
+
+"""
+engines
+"""
+
+func get_random_move():
+	var legal_moves = get_list_of_legal_moves()
+	if (legal_moves.size() > 1):
+		var rng = RandomNumberGenerator.new()
+		rng.randomize()
+		var random_variable = rng.randi_range(0, legal_moves.size() - 1)
+		return legal_moves[random_variable]
+	else:
+		return false
